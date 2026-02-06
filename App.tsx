@@ -15,64 +15,93 @@ import * as Speech from 'expo-speech';
 import { Audio } from 'expo-av';
 
 // ============================================
-// CONFIGURAÇÃO DO POLÍTICO - FABIANO HORTA
+// CONFIGURAÇÃO DO CANDIDATO - ANTUNES DO ROSÁRIO (TITANIO)
 // ============================================
 const POLITICO = {
-  nome: 'Fabiano Horta',
-  nomeCompleto: 'Fabiano Taques Horta',
-  cargo: 'Ex-Prefeito de Maricá (2017-2024)',
-  partido: 'PT - Partido dos Trabalhadores',
-  nascimento: '25 de agosto de 1974',
-  naturalidade: 'Niterói, RJ',
-  profissao: 'Médico Veterinário',
-  formacao: 'Veterinária pela UFF',
-  corPrimaria: '#cc0000', // Vermelho PT
-  corSecundaria: '#ffffff',
-  corFundo: '#1a1a2e',
+  nome: 'Antunes do Rosário',
+  apelido: 'Titanio',
+  numero: '47',
+  nomeCompleto: 'Antunes do Rosário dos Santos',
+  cargo: 'Candidato a Governador',
+  partido: 'Centro-Esquerda Progressista',
+  slogan: 'Juntos por um Brasil que cuida',
+  idade: '47 anos',
+  naturalidade: 'Belo Horizonte, MG',
+  profissao: 'Economista e Professor Universitário',
+  formacao: 'Doutorado em Desenvolvimento Sustentável (UnB)',
+  corPrimaria: '#2d5016', // Verde institucional
+  corSecundaria: '#f5a623', // Amarelo/dourado
+  corFundo: '#f8faf5',
 };
 
 // ============================================
-// RESPOSTAS DO POLÍTICO
+// RESPOSTAS DO CANDIDATO
 // ============================================
 const RESPOSTAS: { [key: string]: string } = {
   // Saudações
-  'oi': `Olá, companheiro! Sou ${POLITICO.nome}, ex-prefeito de Maricá pelo PT. Fico feliz em conversar com você. O que gostaria de saber sobre nossa gestão?`,
-  'olá': `Olá, companheiro! Sou ${POLITICO.nome}, ex-prefeito de Maricá pelo PT. Fico feliz em conversar com você. O que gostaria de saber sobre nossa gestão?`,
-  'bom dia': `Bom dia, companheiro! ${POLITICO.nome} aqui. Como posso ajudar você hoje?`,
-  'boa tarde': `Boa tarde, companheiro! ${POLITICO.nome} aqui. Como posso ajudar você hoje?`,
-  'boa noite': `Boa noite, companheiro! ${POLITICO.nome} aqui. Como posso ajudar você hoje?`,
+  'oi': `Olá! Sou ${POLITICO.nome}, o ${POLITICO.apelido}! Candidato a governador pelo ${POLITICO.numero}. ${POLITICO.slogan}! Como posso ajudar você hoje?`,
+  'olá': `Olá! Sou ${POLITICO.nome}, o ${POLITICO.apelido}! Candidato a governador pelo ${POLITICO.numero}. ${POLITICO.slogan}! Como posso ajudar você hoje?`,
+  'bom dia': `Bom dia! Aqui é o ${POLITICO.apelido}. Vamos conversar sobre o futuro do nosso estado?`,
+  'boa tarde': `Boa tarde! Aqui é o ${POLITICO.apelido}. Vamos conversar sobre o futuro do nosso estado?`,
+  'boa noite': `Boa noite! Aqui é o ${POLITICO.apelido}. Vamos conversar sobre o futuro do nosso estado?`,
   
   // Quem é
-  'quem é você': `Sou ${POLITICO.nomeCompleto}, nascido em ${POLITICO.naturalidade}. Sou ${POLITICO.profissao} formado pela UFF e militante do PT desde 1999. Fui vereador de Maricá por dois mandatos, deputado federal e prefeito de Maricá de 2017 a 2024. Junto com o companheiro Quaquá, transformamos Maricá em referência nacional de políticas públicas.`,
-  'sua história': `Comecei minha militância política ainda adolescente no PT. Fui eleito vereador em 2008 e reeleito em 2012, chegando a ser presidente da Câmara Municipal. Em 2014, fui eleito deputado federal com quase 38 mil votos. Em 2016, fui eleito prefeito de Maricá com 96% dos votos, sendo reeleito em 2020. Nossa gestão transformou Maricá em um laboratório de políticas públicas inovadoras.`,
+  'quem é você': `Sou ${POLITICO.nomeCompleto}, tenho ${POLITICO.idade}, nasci em ${POLITICO.naturalidade}. Sou ${POLITICO.profissao} com ${POLITICO.formacao}. Fui vereador de BH com mais de 45 mil votos e deputado estadual. Minha vida é dedicada a políticas públicas e justiça social. Política se faz com as pessoas, não para as pessoas!`,
+  'sua história': `Nasci numa família humilde no bairro Lagoinha, em BH. Filho de professora e metalúrgico. Estudei em escola pública a vida toda e aos 17 anos consegui bolsa integral na UFMG. Fui professor, secretário de desenvolvimento social, vereador mais votado da história do partido e deputado estadual. Sempre lutei por educação, transparência e desenvolvimento sustentável.`,
+  'titanio': `Me chamam de Titanio porque, assim como o metal, sou resistente e não enferruja! Tenho ficha limpa, 100% de presença nas sessões da Câmara e nunca me envolvi em nenhum escândalo. Transparência e honestidade são meus pilares.`,
   
-  // Políticas principais
-  'vermelhinho': `O Vermelhinho é nosso orgulho! Criamos a Empresa Pública de Transporte de Maricá com transporte 100% gratuito para a população. Temos a maior frota de ônibus elétricos da América Latina! O passe-livre beneficia milhares de maricaenses diariamente, garantindo o direito de ir e vir sem custo.`,
-  'transporte': `O transporte público gratuito de Maricá é referência mundial! Os Vermelhinhos atendem toda a cidade sem cobrar passagem. Implantamos também ônibus elétricos, mostrando que é possível ter transporte público de qualidade, gratuito e sustentável.`,
+  // EDUCAÇÃO
+  'educação': `Educação é minha prioridade número 1! Minhas propostas: Escola em Tempo Integral para 100% da rede pública. Piso de 8.500 reais para professores. Zero analfabetismo com programas intensivos. 500 mil novas vagas em federais. Um tablet por aluno e programação no currículo. Creche garantida de 0 a 3 anos!`,
+  'escola': `Vamos transformar nossas escolas! Tempo integral para todos, professor valorizado com piso de 8.500 reais, tecnologia nas salas de aula. Minha meta: Brasil entre os 30 melhores em educação até 2030!`,
+  'professor': `Professor tem que ser valorizado! Proponho piso de 8.500 reais com plano de carreira atrativo. Formação continuada e infraestrutura de qualidade. Sem professor valorizado, não há educação de qualidade.`,
   
-  'mumbuca': `A Mumbuca é nossa moeda social digital, pioneira no Brasil! Ela garante a circulação da renda dentro de Maricá, fortalecendo o comércio local. Com a Mumbuca, implementamos a Renda Básica de Cidadania, beneficiando milhares de famílias maricaenses.`,
-  'renda básica': `O Programa Renda Básica de Cidadania de Maricá é o maior programa de renda básica municipal do Brasil! Todos os moradores cadastrados recebem mensalmente em Mumbuca, nossa moeda social. Isso garante dignidade às famílias e movimenta a economia local.`,
-  'moeda social': `A Mumbuca é nossa moeda social digital que circula apenas em Maricá. Ela é usada para pagar a Renda Básica de Cidadania e pode ser usada no comércio local. Isso mantém a riqueza circulando na cidade e fortalece nossos comerciantes.`,
+  // SAÚDE
+  'saúde': `Saúde de verdade é SUS forte! Minhas propostas: UBS funcionando 24 horas. Um médico para cada mil habitantes. Fila zero - exames e cirurgias em até 30 dias. CAPS em todos os municípios para saúde mental. Farmácia Popular ampliada. Telemedicina para áreas remotas. Vamos investir 8% do PIB em saúde pública!`,
+  'sus': `O SUS é patrimônio do povo brasileiro e precisa ser fortalecido! Mais médicos, mais estrutura, mais humanização. Vamos acabar com as filas e garantir atendimento digno para todos.`,
+  'hospital': `Vamos melhorar nossos hospitais! Mais leitos, mais profissionais, equipamentos modernos. E principalmente: UBS 24 horas para desafogar as emergências. Saúde não pode ser só quando adoece, tem que ser prevenção!`,
   
-  'saúde': `Na saúde, investimos pesado! Construímos UPAs, ampliamos as clínicas da família e contratamos mais profissionais. Maricá tem um dos maiores investimentos per capita em saúde do estado. Nosso compromisso é garantir atendimento de qualidade para todos.`,
+  // EMPREGO E RENDA
+  'emprego': `Emprego é dignidade! Minhas propostas: Primeiro Emprego com incentivo fiscal para contratar jovens. MEI sem burocracia. 2 milhões de empregos na economia verde. Salário mínimo com reajuste real. Cursos técnicos gratuitos. Apoio a cooperativas e agricultura familiar. Minha meta é o menor desemprego da história!`,
+  'trabalho': `Trabalho digno para todos! Vamos criar milhões de empregos na indústria verde, tecnologia e serviços. Empreender vai ser fácil, sem burocracia. E vamos qualificar nossos trabalhadores para os empregos do futuro.`,
+  'salário': `Salário mínimo tem que garantir vida digna! Proponho reajuste real acima da inflação, sempre. E mais: crédito acessível para o pequeno empreendedor, apoio a cooperativas. O dinheiro tem que circular na mão do povo!`,
   
-  'educação': `A educação é prioridade absoluta! Maricá tem um dos maiores investimentos per capita em educação do Brasil. Temos escolas em tempo integral, tablets para alunos, professores bem remunerados e merenda escolar de qualidade. Educação transforma vidas!`,
+  // MEIO AMBIENTE
+  'meio ambiente': `Sou doutor em Desenvolvimento Sustentável! Propostas: Desmatamento zero com fiscalização por satélite. 100% de energia renovável até 2035. Ônibus elétricos e ciclovias. Reciclagem em todos os municípios. Saneamento básico universal. Amazônia protegida. Minha meta: Brasil carbono neutro até 2040!`,
+  'sustentabilidade': `Desenvolvimento sustentável é o caminho! Podemos crescer respeitando o meio ambiente. A economia verde vai gerar milhões de empregos. Energia limpa, mobilidade verde, reciclagem total. É possível e necessário!`,
+  'clima': `A crise climática é real e urgente! Precisamos agir agora. Brasil carbono neutro até 2040. Energia 100% renovável. Proteção da Amazônia. Transição energética justa. Não é escolha, é sobrevivência!`,
   
-  'emprego': `Geramos milhares de empregos em Maricá! Com os royalties do petróleo bem aplicados, investimos em infraestrutura, turismo e novas empresas. A Film Commission atrai produções audiovisuais, o turismo cresce e a economia local se fortalece.`,
+  // SEGURANÇA
+  'segurança': `Segurança cidadã, não violência! Propostas: Polícia comunitária com policial de referência em cada bairro. Câmeras inteligentes e integração de dados. Recuperar jovens, não só punir. Tolerância zero com milícias. Política restritiva de armas. Fim da violência policial. Meta: reduzir violência em 50%!`,
+  'violência': `A violência tem raízes sociais! Precisamos atacar as causas: pobreza, falta de educação, desemprego. E ao mesmo tempo: polícia inteligente, comunitária, respeitando direitos. Combater o crime organizado com rigor.`,
+  'polícia': `Polícia tem que ser respeitada e respeitar! Policial bem pago, bem treinado, bem equipado. Mas também: fim dos abusos, câmeras corporais, accountability. Segurança pública não é guerra, é paz!`,
   
-  'turismo': `Maricá tem um potencial turístico imenso! Praias paradisíacas, lagoas, serras e rica cultura. Investimos em infraestrutura turística e criamos a Film Commission para atrair produções de cinema e TV. Turismo gera emprego e renda para nossa gente.`,
+  // MORADIA
+  'moradia': `Moradia é direito! Propostas: 2 milhões de casas populares em 4 anos. Aluguel social para famílias vulneráveis. Urbanização de favelas com saneamento. Crédito a juros baixos. Prédios públicos ociosos viram moradia. Meta: déficit habitacional zero!`,
+  'casa': `Todo brasileiro merece um lar! Vamos construir 2 milhões de moradias populares, com crédito acessível e aluguel social para quem precisa. E urbanizar nossas favelas com dignidade.`,
   
-  'royalties': `Os royalties do petróleo são aplicados com responsabilidade em Maricá. Em vez de gastar tudo de uma vez, investimos em políticas públicas que transformam a vida das pessoas: Renda Básica, Vermelhinho, saúde, educação. O dinheiro do povo voltando para o povo!`,
+  // TRANSPARÊNCIA
+  'corrupção': `Tolerância zero com corrupção! Sempre tive ficha limpa. Proponho: dados abertos em tempo real, orçamento participativo, inteligência artificial para detectar fraudes. O dinheiro público é sagrado!`,
+  'transparência': `Governo transparente é compromisso! Todos os gastos em tempo real na internet. Orçamento participativo para o povo decidir. Serviços públicos 100% digitais. Fim do fura-fila. É assim que se governa: às claras!`,
   
-  'pt': `Sou militante do PT desde 1999. O Partido dos Trabalhadores representa a luta dos trabalhadores brasileiros por dignidade, emprego e justiça social. Em Maricá, mostramos que é possível governar para o povo, com políticas públicas que transformam vidas.`,
-  'partido': `O PT é minha casa desde 1999. Nossa gestão em Maricá provou que os ideais do partido funcionam na prática: renda básica, transporte gratuito, investimento em saúde e educação. Governar para o povo, não para os ricos!`,
+  // CULTURA E ESPORTE
+  'cultura': `Cultura é direito, não luxo! Propostas: Vale Cultura de 100 reais por mês para trabalhadores. 10 mil novos Pontos de Cultura. Apoio a artistas locais. A cultura transforma vidas e comunidades!`,
+  'esporte': `Esporte para todos! Praças da Juventude com equipamentos em cada bairro. Bolsa Atleta ampliada para esportes amadores. Esporte é saúde, é cidadania, é oportunidade!`,
   
-  'quaquá': `Washington Quaquá é meu companheiro de luta! Juntos construímos a Maricá que é hoje referência nacional. Ele foi prefeito antes de mim e voltou em 2025. Nossa parceria mostra a força da política feita com seriedade e compromisso com o povo.`,
+  // ECONOMIA
+  'economia': `Sou economista e sei que o Brasil pode mais! Desenvolvimento com justiça social. Reforma tributária progressiva - rico paga mais. Combate à sonegação que perde 600 bilhões por ano. Eficiência no gasto público. Não prometo milagres, prometo trabalho!`,
+  'impostos': `Não vou aumentar impostos para a classe média! O que proponho é justiça: reforma tributária progressiva, quem ganha mais paga mais. E combater a sonegação. Assim tem dinheiro para educação, saúde e segurança.`,
   
-  // Despedidas
-  'obrigado': `Eu que agradeço, companheiro! A luta continua. Juntos somos mais fortes! Um abraço!`,
-  'tchau': `Até mais, companheiro! Conte sempre comigo. A luta por uma Maricá melhor continua! Um abraço!`,
-  'valeu': `Valeu, companheiro! Qualquer dúvida, estou à disposição. A luta continua!`,
+  // COMPROMISSOS
+  'promessas': `Não prometo milagres, prometo trabalho! Meus compromissos: não aumentar impostos para classe média, manter responsabilidade fiscal, respeitar a Constituição, governar para todos sem distinção, prestar contas mensalmente. Política se faz com as pessoas!`,
+  
+  // DESPEDIDAS
+  'obrigado': `Eu que agradeço! Conte comigo. Juntos vamos construir um Brasil que cuida de verdade. Um abraço!`,
+  'tchau': `Até mais! Não esquece: ${POLITICO.apelido} ${POLITICO.numero}! Juntos por um Brasil que cuida. Um abraço!`,
+  'valeu': `Valeu! Qualquer dúvida, estou aqui. ${POLITICO.apelido} ${POLITICO.numero}!`,
+  
+  // Número
+  '47': `Isso! ${POLITICO.apelido} ${POLITICO.numero}! Juntos por um Brasil que cuida. Conto com seu voto!`,
+  'número': `Meu número é ${POLITICO.numero}! ${POLITICO.apelido} ${POLITICO.numero}. Fácil de lembrar!`,
 };
 
 // Função para encontrar resposta
@@ -87,7 +116,7 @@ function encontrarResposta(mensagem: string): string {
   }
   
   // Resposta padrão
-  return `Obrigado pela sua mensagem, companheiro! Como ex-prefeito de Maricá, trabalhei muito por nossa cidade. Pode me perguntar sobre o Vermelhinho (transporte gratuito), a Mumbuca (moeda social), Renda Básica, saúde, educação, ou qualquer política da nossa gestão. Estou aqui para conversar!`;
+  return `Obrigado pela sua mensagem! Sou ${POLITICO.nome}, o ${POLITICO.apelido} ${POLITICO.numero}. ${POLITICO.slogan}! Pode me perguntar sobre educação, saúde, emprego, meio ambiente, segurança, moradia, ou qualquer proposta do meu programa. Estou aqui para conversar com você!`;
 }
 
 interface Mensagem {
@@ -101,7 +130,7 @@ export default function App() {
   const [mensagens, setMensagens] = useState<Mensagem[]>([
     {
       id: 0,
-      texto: `Olá, companheiro! Sou ${POLITICO.nome}, ex-prefeito de Maricá pelo PT. Durante minha gestão, implementamos políticas como o Vermelhinho (transporte gratuito), a Mumbuca (moeda social) e a Renda Básica de Cidadania. O que gostaria de saber?`,
+      texto: `Olá! Sou ${POLITICO.nome}, o ${POLITICO.apelido}! Candidato a governador pelo ${POLITICO.numero}. Meu lema é: "${POLITICO.slogan}". Quer saber sobre minhas propostas para educação, saúde, emprego ou meio ambiente? É só perguntar!`,
       remetente: 'politico',
       timestamp: new Date(),
     },
@@ -127,8 +156,8 @@ export default function App() {
     try {
       await Speech.speak(texto, {
         language: 'pt-BR',
-        pitch: 0.95,
-        rate: 0.85,
+        pitch: 1.0,
+        rate: 0.88,
         onDone: () => setIsSpeaking(false),
         onError: () => setIsSpeaking(false),
       });
@@ -212,9 +241,8 @@ export default function App() {
       recordingRef.current = null;
       setIsRecording(false);
 
-      // Por enquanto, usar placeholder
-      // TODO: Integrar com API de transcrição (Whisper)
-      setInputText('Olá, Fabiano!');
+      // Placeholder - integrar com Whisper API no futuro
+      setInputText('Olá, Titanio!');
     } catch (error) {
       console.error('Erro ao parar gravação:', error);
       setIsRecording(false);
@@ -230,16 +258,17 @@ export default function App() {
         <View style={styles.headerContent}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatarPlaceholder}>
-              <Text style={styles.avatarText}>FH</Text>
+              <Text style={styles.avatarText}>47</Text>
             </View>
             <View style={styles.onlineIndicator} />
           </View>
           <View style={styles.headerInfo}>
-            <Text style={styles.headerNome}>{POLITICO.nome}</Text>
-            <Text style={styles.headerCargo}>{POLITICO.cargo}</Text>
-            <Text style={styles.headerPartido}>{POLITICO.partido}</Text>
+            <Text style={styles.headerNome}>{POLITICO.apelido}</Text>
+            <Text style={styles.headerCargo}>{POLITICO.nome}</Text>
+            <Text style={styles.headerPartido}>{POLITICO.cargo} • {POLITICO.numero}</Text>
           </View>
         </View>
+        <Text style={styles.slogan}>"{POLITICO.slogan}"</Text>
       </View>
 
       {/* Chat Messages */}
@@ -307,8 +336,8 @@ export default function App() {
             style={styles.textInput}
             value={inputText}
             onChangeText={setInputText}
-            placeholder="Digite sua mensagem..."
-            placeholderTextColor="#999"
+            placeholder="Pergunte sobre as propostas..."
+            placeholderTextColor="#888"
             multiline
             returnKeyType="send"
             onSubmitEditing={enviarMensagem}
@@ -329,12 +358,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f2f5',
+    backgroundColor: POLITICO.corFundo,
   },
   header: {
     backgroundColor: POLITICO.corPrimaria,
     paddingTop: Platform.OS === 'ios' ? 50 : 35,
-    paddingBottom: 15,
+    paddingBottom: 12,
     paddingHorizontal: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -353,14 +382,14 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 28,
-    backgroundColor: '#fff',
+    backgroundColor: POLITICO.corSecundaria,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
   avatarText: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: POLITICO.corPrimaria,
   },
@@ -380,19 +409,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerNome: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
   },
   headerCargo: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.95)',
+    marginTop: 1,
   },
   headerPartido: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.75)',
     marginTop: 1,
+  },
+  slogan: {
+    fontSize: 12,
+    fontStyle: 'italic',
+    color: POLITICO.corSecundaria,
+    marginTop: 8,
+    textAlign: 'center',
   },
   chatWrapper: {
     flex: 1,
@@ -482,7 +518,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   micButtonActive: {
-    backgroundColor: POLITICO.corPrimaria,
+    backgroundColor: POLITICO.corSecundaria,
   },
   micButtonText: {
     fontSize: 20,

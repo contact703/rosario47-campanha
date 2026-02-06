@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Chat Fabiano Horta",
-    "slug": "chat-fabiano-horta",
+    "name": "Titanio 47",
+    "slug": "titanio-47",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,18 +10,18 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#cc0000"
+      "backgroundColor": "#2d5016"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.titaniofilms.chatfabianohorta"
+      "bundleIdentifier": "com.titaniofilms.titanio47"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#cc0000"
+        "backgroundColor": "#2d5016"
       },
-      "package": "com.titaniofilms.chatfabianohorta",
+      "package": "com.titaniofilms.titanio47",
       "permissions": [
         "RECORD_AUDIO"
       ],
@@ -35,7 +35,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "chat-fabiano-horta"
+        "projectId": "titanio-47"
       }
     },
     "owner": "titaniofilms"
