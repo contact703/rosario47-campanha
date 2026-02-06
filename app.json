@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Chat Político",
-    "slug": "chat-politico",
+    "name": "Chat Fabiano Horta",
+    "slug": "chat-fabiano-horta",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,21 +10,22 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1a365d"
+      "backgroundColor": "#cc0000"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.titaniofilms.chatpolitico"
+      "bundleIdentifier": "com.titaniofilms.chatfabianohorta"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1a365d"
+        "backgroundColor": "#cc0000"
       },
-      "package": "com.titaniofilms.chatpolitico",
+      "package": "com.titaniofilms.chatfabianohorta",
       "permissions": [
         "RECORD_AUDIO"
-      ]
+      ],
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,8 +35,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "politico-chat-app"
+        "projectId": "chat-fabiano-horta"
       }
-    }
+    },
+    "owner": "titaniofilms"
   }
 }
