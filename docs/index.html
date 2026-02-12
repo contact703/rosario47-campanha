@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antunes do Rosário - 47 | Vereador</title>
+  <meta name="description" content="Antunes do Rosário, candidato a vereador pelo 47. Por um futuro melhor para todos!">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-name">ANTUNES</span>
+        <span class="logo-number">47</span>
+      </div>
+      <nav class="nav desktop-nav">
+        <a href="#inicio">Início</a>
+        <a href="#propostas">Propostas</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+        <a href="social.html" class="btn-social">🌐 Rede Social</a>
+      </nav>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="#inicio" onclick="toggleMobileMenu()">Início</a>
+      <a href="#propostas" onclick="toggleMobileMenu()">Propostas</a>
+      <a href="#sobre" onclick="toggleMobileMenu()">Sobre</a>
+      <a href="#contato" onclick="toggleMobileMenu()">Contato</a>
+      <a href="social.html" class="btn-social-mobile">🌐 Rede Social</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Candidato a Vereador</div>
+      <h1 class="hero-name">ANTUNES<br><span>DO ROSÁRIO</span></h1>
+      <div class="hero-number">47</div>
+      <p class="hero-slogan">Por um futuro melhor para todos!</p>
+      <div class="hero-buttons">
+        <a href="#propostas" class="btn btn-primary">Ver Propostas</a>
+        <a href="#chat" class="btn btn-secondary">Fale Comigo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Propostas -->
+  <section class="propostas" id="propostas">
+    <div class="container">
+      <h2 class="section-title">Nossas Propostas</h2>
+      <p class="section-subtitle">Compromissos reais para transformar nossa cidade</p>
+      <div class="propostas-grid">
+        <div class="proposta-card">
+          <div class="proposta-icon">🏥</div>
+          <h3>Saúde</h3>
+          <p>Postos de saúde até 22h, mais médicos, UPA 24h de verdade</p>
+        </div>
+        <div class="proposta-card">
+          <div class="proposta-icon">📚</div>
+          <h3>Educação</h3>
+          <p>Escolas com estrutura, professores valorizados, creches para todos</p>
+        </div>
+        <div class="proposta-card">
+          <div class="proposta-icon">🚌</div>
+          <h3>Transporte</h3>
+          <p>Mais linhas, tarifa justa, ciclovias conectando a cidade</p>
+        </div>
+        <div class="proposta-card">
+          <div class="proposta-icon">🛡️</div>
+          <h3>Segurança</h3>
+          <p>Iluminação pública, câmeras, ronda 24h nos bairros</p>
+        </div>
+        <div class="proposta-card">
+          <div class="proposta-icon">💼</div>
+          <h3>Emprego</h3>
+          <p>Apoio ao MEI, cursos profissionalizantes, economia solidária</p>
+        </div>
+        <div class="proposta-card">
+          <div class="proposta-icon">🌳</div>
+          <h3>Meio Ambiente</h3>
+          <p>Áreas verdes, coleta seletiva, proteção dos rios</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <div class="sobre-content">
+        <div class="sobre-image">
+          <img src="candidato-retrato.jpg" alt="Antunes do Rosário" onerror="this.src='https://via.placeholder.com/400x500/10B981/ffffff?text=47'">
+        </div>
+        <div class="sobre-text">
+          <h2>Quem é Antunes do Rosário?</h2>
+          <p><strong>20 anos de serviço público.</strong> Nascido e criado na comunidade, Antunes trabalhou como professor por 15 anos. Conhece de perto a realidade do povo porque viveu essa realidade.</p>
+          <p>De <strong>centro-esquerda democrática</strong>, acredita em justiça social com responsabilidade. Defende serviços públicos de qualidade, apoio às pequenas empresas e respeito total à democracia.</p>
+          <blockquote>"Não prometo o que não posso cumprir, mas cumpro tudo que prometo."</blockquote>
+          <div class="sobre-stats">
+            <div class="stat">
+              <span class="stat-number">20</span>
+              <span class="stat-label">Anos de serviço</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">15</span>
+              <span class="stat-label">Anos como professor</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">47</span>
+              <span class="stat-label">Vote!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Section -->
+  <section class="chat-section" id="chat">
+    <div class="container">
+      <h2 class="section-title">Fale Comigo</h2>
+      <p class="section-subtitle">Tire suas dúvidas, conheça nossas propostas ou mande sugestões</p>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <!-- Messages appear here -->
+        </div>
+        <div class="chat-input-area">
+          <div class="quick-buttons">
+            <button onclick="quickMessage('Quais são suas propostas?')">📋 Propostas</button>
+            <button onclick="quickMessage('Fale sobre saúde')">🏥 Saúde</button>
+            <button onclick="quickMessage('Fale sobre educação')">📚 Educação</button>
+            <button onclick="quickMessage('Qual é seu número?')">🗳️ Número</button>
+          </div>
+          <div class="chat-input-wrapper">
+            <input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="handleKeyPress(event)">
+            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <button class="send-btn" onclick="sendMessage()">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section class="contato" id="contato">
+    <div class="container">
+      <h2 class="section-title">Entre em Contato</h2>
+      <div class="contato-grid">
+        <div class="contato-item">
+          <i class="fab fa-whatsapp"></i>
+          <h3>WhatsApp</h3>
+          <p>(31) 99999-9999</p>
+        </div>
+        <div class="contato-item">
+          <i class="fab fa-instagram"></i>
+          <h3>Instagram</h3>
+          <p>@rosario47</p>
+        </div>
+        <div class="contato-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>Comitê</h3>
+          <p>Rua Principal, 123 - Centro</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <span class="logo-name">ANTUNES</span>
+          <span class="logo-number">47</span>
+        </div>
+        <p>Por um futuro melhor para todos!</p>
+        <p class="footer-legal">Material de campanha - Eleições 2026</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Social Button -->
+  <a href="social.html" class="mobile-social-btn">
+    <i class="fas fa-users"></i>
+  </a>
+
+  <script src="chat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

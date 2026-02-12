@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rede Rosário 47 - Comunidade</title>
+  <link rel="stylesheet" href="social.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="social-header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <div class="header-title">
+      <span class="header-name">Rede Rosário</span>
+      <span class="header-number">47</span>
+    </div>
+    <div class="user-menu" onclick="toggleUserDropdown()">
+      <div class="user-avatar" id="userInitial">?</div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-info">
+          <div class="user-name" id="userName">Usuário</div>
+          <div class="user-email" id="userEmail">email@teste.com</div>
+        </div>
+        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="social-nav">
+    <button class="nav-item active" onclick="showSection('forum')">
+      <i class="fas fa-comments"></i> Fórum
+    </button>
+    <button class="nav-item" onclick="showSection('events')">
+      <i class="fas fa-calendar"></i> Eventos
+    </button>
+    <button class="nav-item" onclick="showSection('messages')">
+      <i class="fas fa-envelope"></i> Mensagens
+    </button>
+    <button class="nav-item" onclick="showSection('profile')">
+      <i class="fas fa-user"></i> Perfil
+    </button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="social-main">
+    <!-- Forum Section -->
+    <section id="forumSection" class="content-section active">
+      <div class="section-header">
+        <h2>Fórum da Campanha</h2>
+        <button class="new-post-btn" onclick="openNewPostModal()">
+          <i class="fas fa-plus"></i> Novo Post
+        </button>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="filterCategory('all')">Todos</button>
+        <button class="tab-btn" onclick="filterCategory('comunicados')">📢 Comunicados</button>
+        <button class="tab-btn" onclick="filterCategory('ideias')">💡 Ideias</button>
+        <button class="tab-btn" onclick="filterCategory('eventos')">📅 Eventos</button>
+      </div>
+      <div class="posts-list" id="postsList">
+        <!-- Posts loaded via JS -->
+      </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="eventsSection" class="content-section">
+      <div class="section-header">
+        <h2>Próximos Eventos</h2>
+      </div>
+      <div class="events-list" id="eventsList">
+        <!-- Events loaded via JS -->
+      </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messagesSection" class="content-section">
+      <div class="section-header">
+        <h2>Mensagens</h2>
+      </div>
+      <div class="conversations-list" id="conversationsList">
+        <!-- Conversations loaded via JS -->
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profileSection" class="content-section">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profileInitial">?</div>
+        <h2 id="profileName">Usuário</h2>
+        <p class="profile-member">Membro da campanha</p>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Posts</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Eventos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Pontos</span>
+          </div>
+        </div>
+      </div>
+      <div class="ranking-card">
+        <h3>🏆 Ranking de Militância</h3>
+        <div class="ranking-list" id="rankingList">
+          <!-- Ranking loaded via JS -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content login-modal">
+      <h2>Bem-vindo à Rede Rosário 47!</h2>
+      <p>Entre para participar da comunidade</p>
+      <div id="loginFormContainer">
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Senha">
+        <button class="btn-primary" onclick="handleLogin()">Entrar</button>
+        <p class="form-switch">Não tem conta? <a onclick="showRegisterForm()">Cadastre-se</a></p>
+      </div>
+      <div id="registerFormContainer" style="display: none;">
+        <input type="text" id="registerName" placeholder="Nome completo">
+        <input type="email" id="registerEmail" placeholder="Email">
+        <input type="password" id="registerPassword" placeholder="Senha">
+        <button class="btn-primary" onclick="handleRegister()">Cadastrar</button>
+        <p class="form-switch">Já tem conta? <a onclick="showLoginForm()">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Post Modal -->
+  <div class="modal" id="newPostModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Novo Post</h3>
+        <button class="close-btn" onclick="closeNewPostModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <input type="text" id="postTitle" placeholder="Título do post">
+      <textarea id="postContent" placeholder="O que você quer compartilhar?"></textarea>
+      <select id="postCategory">
+        <option value="geral">💬 Geral</option>
+        <option value="comunicados">📢 Comunicados</option>
+        <option value="ideias">💡 Ideias</option>
+        <option value="eventos">📅 Eventos</option>
+        <option value="duvidas">❓ Dúvidas</option>
+      </select>
+      <button class="btn-primary" onclick="submitPost()">Publicar</button>
+    </div>
+  </div>
+
+  <!-- Comments Modal -->
+  <div class="modal" id="commentsModal">
+    <div class="modal-content comments-modal">
+      <div class="modal-header">
+        <h3>Comentários</h3>
+        <button class="close-btn" onclick="closeCommentsModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="post-preview" id="postPreview"></div>
+      <div class="comments-list" id="commentsList"></div>
+      <div class="comment-input">
+        <input type="text" id="newComment" placeholder="Escreva um comentário...">
+        <button onclick="submitComment()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <button class="bottom-nav-item active" onclick="showSection('forum')">
+      <i class="fas fa-comments"></i>
+      <span>Fórum</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showSection('events')">
+      <i class="fas fa-calendar"></i>
+      <span>Eventos</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showSection('messages')">
+      <i class="fas fa-envelope"></i>
+      <span>Mensagens</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showSection('profile')">
+      <i class="fas fa-user"></i>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <script src="social.js"></script>
+</body>
+</html>
