@@ -383,8 +383,9 @@ export default function ChatScreen({ user }: Props) {
 
     Speech.speak(cleanText, {
       language: 'pt-BR',
-      pitch: 1.0,
+      pitch: 0.85,  // Voz mais grave (masculina)
       rate: 0.9,
+      voice: 'com.apple.voice.compact.pt-BR.Luciana', // Fallback iOS
       onDone: () => setIsSpeaking(false),
       onError: () => setIsSpeaking(false),
     });
