@@ -333,7 +333,7 @@ export default function ForumScreen({ user }: Props) {
   );
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom + 80 }]}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom + 80 }]}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Fórum</Text>
