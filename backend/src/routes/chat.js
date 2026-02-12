@@ -2,6 +2,14 @@ const express = require('express');
 const router = express.Router();
 const githubKnowledge = require('../services/github-knowledge');
 
+// Tenta carregar AI Chat se disponível
+let aiChat = null;
+try {
+  aiChat = require('../services/ai-chat');
+} catch (e) {
+  console.log('AI Chat service not loaded');
+}
+
 // Base de conhecimento completa do candidato
 const CONHECIMENTO = {
   candidato: {
@@ -13,15 +21,12 @@ const CONHECIMENTO = {
     historia: `Antunes do Rosário é um líder comunitário nascido e criado em nossa cidade. 
     Com mais de 15 anos de experiência como professor da rede pública, ele conhece de perto 
     os desafios enfrentados pela população. Sua trajetória é marcada pela luta por direitos 
-    e pela defesa incansável das causas populares. Agora, candidato a vereador pelo número 47, 
-    Antunes quer levar essa experiência e dedicação para a Câmara Municipal, trabalhando 
-    por políticas públicas que realmente transformem a vida das pessoas.`,
+    e pela defesa incansável das causas populares.`,
     experiencia: [
       'Professor da rede pública por 15 anos',
       'Presidente da Associação de Moradores do Bairro Centro',
       'Conselheiro Municipal de Educação',
-      'Coordenador de projetos sociais na comunidade',
-      'Fundador do projeto "Educação para Todos"'
+      'Coordenador de projetos sociais na comunidade'
     ],
     valores: [
       'Transparência e honestidade',
@@ -34,124 +39,95 @@ const CONHECIMENTO = {
   propostas: {
     saude: {
       titulo: 'Saúde de Qualidade para Todos',
-      resumo: 'Ampliar o acesso à saúde com mais profissionais, melhor infraestrutura e atendimento humanizado.',
+      resumo: 'Ampliar o acesso à saúde com mais profissionais e melhor infraestrutura.',
       itens: [
-        'Ampliar o horário de funcionamento dos postos de saúde até 22h',
-        'Contratar mais médicos especialistas: cardiologia, ortopedia, pediatria e ginecologia',
-        'Garantir funcionamento 24h das UPAs com equipe completa',
-        'Realizar mutirões mensais de exames preventivos',
-        'Fortalecer o CAPS para atendimento em saúde mental',
-        'Ampliar o programa Farmácia Popular com mais medicamentos',
-        'Implementar programa de saúde da família em todos os bairros',
-        'Criar central de marcação de consultas online'
+        'Postos de saúde até 22h',
+        'Mais médicos especialistas',
+        'UPA 24h funcionando de verdade',
+        'CAPS fortalecido para saúde mental',
+        'Farmácia Popular ampliada'
       ]
     },
     educacao: {
       titulo: 'Educação Transformadora',
-      resumo: 'Investir na educação como ferramenta de transformação social e desenvolvimento.',
+      resumo: 'Investir na educação como ferramenta de transformação social.',
       itens: [
-        'Instalar ar condicionado em todas as salas de aula',
-        'Construir quadras esportivas cobertas nas escolas',
-        'Valorizar os professores com plano de carreira justo',
-        'Ampliar vagas em creches públicas',
-        'Oferecer cursos profissionalizantes gratuitos para jovens',
-        'Distribuir tablets para alunos da rede municipal',
-        'Implementar programa de reforço escolar no contraturno',
-        'Criar bibliotecas comunitárias nos bairros'
+        'Ar condicionado em todas as salas de aula',
+        'Valorização do professor com plano de carreira',
+        'Creches para todos os bairros',
+        'Cursos profissionalizantes gratuitos',
+        'Internet de qualidade nas escolas'
       ]
     },
     transporte: {
       titulo: 'Mobilidade para Todos',
       resumo: 'Melhorar o transporte público para facilitar a vida da população.',
       itens: [
-        'Criar mais linhas de ônibus para os bairros periféricos',
-        'Implementar tarifa social para desempregados e estudantes',
-        'Construir abrigos de ônibus com banco e cobertura em todas as paradas',
-        'Expandir a rede de ciclovias conectando os bairros',
-        'Garantir transporte escolar gratuito para todos os estudantes',
-        'Melhorar a iluminação nos pontos de ônibus',
-        'Fiscalizar a qualidade dos veículos do transporte público'
+        'Mais linhas de ônibus à noite e fim de semana',
+        'Tarifa social para desempregados',
+        'Integração temporal de 3 horas',
+        'Ciclovias conectando a cidade',
+        'Abrigos de ônibus com cobertura'
       ]
     },
     seguranca: {
       titulo: 'Segurança e Proteção',
-      resumo: 'Atuar na prevenção e proteção da comunidade em parceria com as forças de segurança.',
+      resumo: 'Atuar na prevenção e proteção da comunidade.',
       itens: [
-        'Garantir iluminação pública em todas as ruas da cidade',
-        'Implementar ronda municipal em todos os bairros',
-        'Instalar câmeras de segurança nas praças e áreas públicas',
-        'Fortalecer a Guarda Municipal com funcionamento 24h',
-        'Criar parceria com a polícia para patrulhamento ostensivo',
-        'Implementar programa Vizinhança Solidária',
-        'Revitalizar praças e áreas abandonadas'
+        'Iluminação pública LED em todas as ruas',
+        'Câmeras de segurança nos pontos críticos',
+        'Ronda 24h da Guarda Municipal',
+        'Botão de pânico nos pontos de ônibus'
       ]
     },
     emprego: {
       titulo: 'Trabalho e Renda',
-      resumo: 'Fomentar a economia local e criar oportunidades de trabalho.',
+      resumo: 'Fomentar a economia local e criar oportunidades.',
       itens: [
-        'Incentivar pequenos negócios e empreendedores locais',
-        'Realizar Feira do Empreendedor mensalmente',
-        'Oferecer cursos de capacitação profissional gratuitos',
-        'Criar Banco de Empregos Municipal online',
-        'Facilitar microcrédito para MEIs',
-        'Apoiar cooperativas e economia solidária',
-        'Promover parcerias com empresas para primeiro emprego'
+        'Apoio ao MEI - menos burocracia',
+        'Cursos de capacitação gratuitos',
+        'Feiras de emprego mensais',
+        'Microcrédito para pequenos negócios'
       ]
     },
-    cultura: {
-      titulo: 'Cultura Viva',
-      resumo: 'Valorizar a cultura local e ampliar o acesso às atividades culturais.',
+    meioAmbiente: {
+      titulo: 'Cidade Verde',
+      resumo: 'Desenvolvimento sustentável e qualidade de vida.',
       itens: [
-        'Criar centros culturais em cada região da cidade',
-        'Apoiar artistas locais com editais e incentivos',
-        'Realizar Festival Cultural anual',
-        'Manter bibliotecas públicas funcionando aos sábados',
-        'Criar espaços para shows e eventos gratuitos',
-        'Implementar programa de oficinas culturais nas escolas',
-        'Preservar o patrimônio histórico da cidade'
+        'Mais praças e áreas verdes',
+        'Coleta seletiva em todos os bairros',
+        'Proteção dos rios e nascentes',
+        'Hortas comunitárias'
       ]
     }
   },
   eventos: [
-    { nome: 'Grande Carreata', data: 'Sábado, 14h', local: 'Saída da Praça Central', descricao: 'Carreata com trio elétrico percorrendo todos os bairros!' },
-    { nome: 'Reunião com Moradores', data: 'Terça-feira, 19h', local: 'Comitê de Campanha', descricao: 'Venha conversar diretamente com Antunes sobre suas demandas.' },
-    { nome: 'Panfletagem', data: 'Quarta-feira, 8h', local: 'Feira do Centro', descricao: 'Distribuição de material e conversa com a população.' },
-    { nome: 'Debate entre Candidatos', data: 'Quinta-feira, 20h', local: 'Câmara Municipal', descricao: 'Acompanhe o debate e conheça as propostas de cada candidato.' },
-    { nome: 'Comício Final', data: 'Sexta-feira, 18h', local: 'Praça da Matriz', descricao: 'Grande comício de encerramento da campanha!' }
+    { nome: 'Grande Carreata', data: 'Sábado, 14h', local: 'Saída da Praça Central' },
+    { nome: 'Reunião com Moradores', data: 'Terça-feira, 19h', local: 'Comitê de Campanha' },
+    { nome: 'Debate entre Candidatos', data: 'Quinta-feira, 20h', local: 'Câmara Municipal' }
   ],
   contato: {
     whatsapp: '(31) 99999-9999',
     email: 'contato@rosario47.com.br',
     endereco: 'Rua Principal, 123 - Centro',
-    instagram: '@rosario47',
-    facebook: '/rosario47',
-    site: 'www.rosario47.com.br'
-  },
-  faq: [
-    { pergunta: 'Qual o número do Antunes?', resposta: 'O número do Antunes do Rosário na urna é 47!' },
-    { pergunta: 'Como posso ajudar na campanha?', resposta: 'Você pode ajudar de várias formas: participando dos eventos, divulgando nas redes sociais, conversando com amigos e familiares, ou se voluntariando no comitê!' },
-    { pergunta: 'Onde fica o comitê?', resposta: 'Nosso comitê fica na Rua Principal, 123 - Centro. Estamos abertos todos os dias das 8h às 20h!' },
-    { pergunta: 'Como entrar em contato?', resposta: 'Você pode nos contatar pelo WhatsApp (31) 99999-9999, email contato@rosario47.com.br ou visitar nosso comitê!' }
-  ]
+    instagram: '@rosario47'
+  }
 };
 
-// Palavras-chave expandidas
+// Palavras-chave para fallback
 const KEYWORDS = {
-  candidato: ['antunes', 'rosário', 'rosario', 'candidato', 'quem é', 'quem e', 'história', 'historia', 'biografia', 'experiência', 'experiencia', 'trajetória', 'trajetoria', 'sobre ele', 'conheça', 'conheca'],
-  numero: ['número', 'numero', 'votar', 'voto', '47', 'eleição', 'eleicao', 'urna', 'digitar', 'apertar'],
-  saude: ['saúde', 'saude', 'médico', 'medico', 'hospital', 'posto', 'upa', 'doença', 'doente', 'remédio', 'remedio', 'farmácia', 'farmacia', 'caps', 'mental', 'consulta', 'exame', 'vacina'],
-  educacao: ['educação', 'educacao', 'escola', 'professor', 'professora', 'aluno', 'aluna', 'creche', 'estudar', 'ensino', 'aula', 'tablet', 'quadra', 'merenda', 'biblioteca'],
-  transporte: ['transporte', 'ônibus', 'onibus', 'tarifa', 'passagem', 'ciclovia', 'bicicleta', 'trânsito', 'transito', 'mobilidade', 'ponto de ônibus'],
-  seguranca: ['segurança', 'seguranca', 'policia', 'polícia', 'roubo', 'assalto', 'iluminação', 'iluminacao', 'câmera', 'camera', 'guarda', 'violência', 'violencia', 'crime', 'medo'],
-  emprego: ['emprego', 'trabalho', 'desemprego', 'negócio', 'negocio', 'empreendedor', 'mei', 'microcrédito', 'renda', 'salário', 'vaga', 'contratação'],
-  cultura: ['cultura', 'cultural', 'arte', 'artista', 'show', 'música', 'musica', 'biblioteca', 'festival', 'teatro', 'cinema', 'evento cultural'],
-  propostas: ['proposta', 'plano', 'projeto', 'vai fazer', 'pretende', 'promessa', 'ideia', 'ideias', 'plataforma', 'programa'],
-  eventos: ['evento', 'carreata', 'reunião', 'reuniao', 'panfletagem', 'debate', 'encontro', 'quando', 'onde', 'comício', 'comicio', 'agenda'],
-  contato: ['contato', 'telefone', 'whatsapp', 'zap', 'email', 'endereço', 'endereco', 'instagram', 'rede social', 'falar com', 'comitê', 'comite', 'localização'],
-  ajuda: ['ajuda', 'ajudar', 'voluntário', 'voluntario', 'contribuir', 'participar', 'campanha', 'apoiar', 'como posso'],
-  saudacao: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'eae', 'eai', 'opa', 'hey', 'ei', 'oie', 'hello'],
-  agradecimento: ['obrigado', 'obrigada', 'valeu', 'thanks', 'brigado', 'vlw', 'agradeço']
+  candidato: ['antunes', 'rosário', 'rosario', 'candidato', 'quem é', 'quem e', 'história', 'historia'],
+  numero: ['número', 'numero', 'votar', 'voto', '47', 'urna'],
+  saude: ['saúde', 'saude', 'médico', 'medico', 'hospital', 'posto', 'upa'],
+  educacao: ['educação', 'educacao', 'escola', 'professor', 'creche'],
+  transporte: ['transporte', 'ônibus', 'onibus', 'tarifa', 'passagem'],
+  seguranca: ['segurança', 'seguranca', 'policia', 'polícia', 'iluminação'],
+  emprego: ['emprego', 'trabalho', 'desemprego', 'mei'],
+  propostas: ['proposta', 'plano', 'projeto', 'vai fazer'],
+  eventos: ['evento', 'carreata', 'reunião', 'debate', 'agenda'],
+  contato: ['contato', 'telefone', 'whatsapp', 'comitê'],
+  saudacao: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite'],
+  agradecimento: ['obrigado', 'obrigada', 'valeu']
 };
 
 function detectarIntencoes(texto) {
@@ -172,97 +148,75 @@ function detectarIntencoes(texto) {
   return intencoes.length > 0 ? intencoes : ['geral'];
 }
 
-function gerarResposta(intencoes, texto) {
+function gerarRespostaFallback(intencoes, texto) {
   const respostas = [];
-  const textoLower = texto.toLowerCase();
   
-  for (const intencao of intencoes.slice(0, 2)) { // Max 2 intenções
+  for (const intencao of intencoes.slice(0, 2)) {
     switch (intencao) {
       case 'saudacao':
-        respostas.push(`Olá! 👋 Bem-vindo ao canal oficial do ${CONHECIMENTO.candidato.nome} ${CONHECIMENTO.candidato.numero}!\n\nEstou aqui para te ajudar a conhecer melhor nosso candidato e suas propostas.\n\nSobre o que você gostaria de saber?\n• Propostas\n• Eventos\n• Como ajudar\n• Contato`);
+        respostas.push(`Olá! 👋 Sou Antunes do Rosário, candidato a vereador pelo **47**!\n\nEstou aqui para conversar sobre minhas propostas e ouvir você.\n\nSobre o que gostaria de saber?`);
         break;
         
       case 'candidato':
-        respostas.push(`📋 **${CONHECIMENTO.candidato.nome}** - Candidato a ${CONHECIMENTO.candidato.cargo}\n\n${CONHECIMENTO.candidato.historia}\n\n**Experiência:**\n${CONHECIMENTO.candidato.experiencia.map(e => `• ${e}`).join('\n')}\n\n🗳️ Vote ${CONHECIMENTO.candidato.numero}!`);
+        respostas.push(`Sou **Antunes do Rosário**, candidato pelo **47**! 👨‍🏫\n\n${CONHECIMENTO.candidato.historia}\n\n**Minha experiência:**\n${CONHECIMENTO.candidato.experiencia.map(e => `• ${e}`).join('\n')}\n\n💚 Vote 47!`);
         break;
         
       case 'numero':
-        respostas.push(`🗳️ **VOTE ${CONHECIMENTO.candidato.numero}!**\n\nO número do ${CONHECIMENTO.candidato.nome} na urna é **${CONHECIMENTO.candidato.numero}**.\n\nNo dia da eleição:\n1. Digite ${CONHECIMENTO.candidato.numero}\n2. Confira a foto\n3. Aperte CONFIRMA\n\n💚 Juntos por um futuro melhor!`);
+        respostas.push(`🗳️ **Meu número é 47!**\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\n\nConta comigo que eu conto com você! 💚`);
         break;
         
       case 'saude':
         const s = CONHECIMENTO.propostas.saude;
-        respostas.push(`🏥 **${s.titulo}**\n\n${s.resumo}\n\n**Propostas:**\n${s.itens.map(i => `• ${i}`).join('\n')}\n\n${CONHECIMENTO.candidato.nome} sabe que saúde é prioridade absoluta!`);
+        respostas.push(`🏥 **${s.titulo}**\n\n${s.resumo}\n\n**Minhas propostas:**\n${s.itens.map(i => `✅ ${i}`).join('\n')}\n\nQuem trabalha o dia todo merece atendimento à noite! 💚`);
         break;
         
       case 'educacao':
         const e = CONHECIMENTO.propostas.educacao;
-        respostas.push(`📚 **${e.titulo}**\n\n${e.resumo}\n\n**Propostas:**\n${e.itens.map(i => `• ${i}`).join('\n')}\n\nComo ex-professor, ${CONHECIMENTO.candidato.nome} conhece de perto os desafios da educação!`);
+        respostas.push(`📚 **${e.titulo}**\n\nFui professor por 15 anos, sei o que a escola precisa!\n\n**Minhas propostas:**\n${e.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'transporte':
         const t = CONHECIMENTO.propostas.transporte;
-        respostas.push(`🚌 **${t.titulo}**\n\n${t.resumo}\n\n**Propostas:**\n${t.itens.map(i => `• ${i}`).join('\n')}`);
+        respostas.push(`🚌 **${t.titulo}**\n\n${t.resumo}\n\n**Minhas propostas:**\n${t.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'seguranca':
         const seg = CONHECIMENTO.propostas.seguranca;
-        respostas.push(`🛡️ **${seg.titulo}**\n\n${seg.resumo}\n\n**Propostas:**\n${seg.itens.map(i => `• ${i}`).join('\n')}`);
+        respostas.push(`🛡️ **${seg.titulo}**\n\n${seg.resumo}\n\n**Minhas propostas:**\n${seg.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'emprego':
         const emp = CONHECIMENTO.propostas.emprego;
-        respostas.push(`💼 **${emp.titulo}**\n\n${emp.resumo}\n\n**Propostas:**\n${emp.itens.map(i => `• ${i}`).join('\n')}`);
-        break;
-        
-      case 'cultura':
-        const c = CONHECIMENTO.propostas.cultura;
-        respostas.push(`🎭 **${c.titulo}**\n\n${c.resumo}\n\n**Propostas:**\n${c.itens.map(i => `• ${i}`).join('\n')}`);
+        respostas.push(`💼 **${emp.titulo}**\n\n${emp.resumo}\n\n**Minhas propostas:**\n${emp.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'propostas':
-        respostas.push(`📋 **Áreas de Atuação de ${CONHECIMENTO.candidato.nome}:**\n\n🏥 **Saúde** - ${CONHECIMENTO.propostas.saude.resumo}\n\n📚 **Educação** - ${CONHECIMENTO.propostas.educacao.resumo}\n\n🚌 **Transporte** - ${CONHECIMENTO.propostas.transporte.resumo}\n\n🛡️ **Segurança** - ${CONHECIMENTO.propostas.seguranca.resumo}\n\n💼 **Emprego** - ${CONHECIMENTO.propostas.emprego.resumo}\n\n🎭 **Cultura** - ${CONHECIMENTO.propostas.cultura.resumo}\n\nDigite o nome da área para saber mais detalhes!`);
+        respostas.push(`📋 **Minhas principais bandeiras:**\n\n🏥 **Saúde** - Postos até 22h, UPA 24h\n📚 **Educação** - Escolas com estrutura\n🚌 **Transporte** - Mais ônibus, tarifa social\n🛡️ **Segurança** - Luz e câmeras\n💼 **Emprego** - Apoio ao trabalhador\n🌳 **Meio ambiente** - Cidade verde\n\nPergunta sobre qualquer uma! 💚`);
         break;
         
       case 'eventos':
         const eventosTexto = CONHECIMENTO.eventos.map(ev => 
-          `📅 **${ev.nome}**\n   📍 ${ev.local}\n   🕐 ${ev.data}\n   ${ev.descricao}`
+          `📅 **${ev.nome}** - ${ev.data}\n   📍 ${ev.local}`
         ).join('\n\n');
-        respostas.push(`🗓️ **Agenda da Campanha**\n\n${eventosTexto}\n\nVenha participar e conhecer ${CONHECIMENTO.candidato.nome} pessoalmente!`);
+        respostas.push(`🗓️ **Agenda da Campanha**\n\n${eventosTexto}\n\nVenha participar! 💚`);
         break;
         
       case 'contato':
-        respostas.push(`📞 **Fale Conosco!**\n\n📱 WhatsApp: ${CONHECIMENTO.contato.whatsapp}\n📧 Email: ${CONHECIMENTO.contato.email}\n📍 Comitê: ${CONHECIMENTO.contato.endereco}\n📸 Instagram: ${CONHECIMENTO.contato.instagram}\n📘 Facebook: ${CONHECIMENTO.contato.facebook}\n\nEstamos sempre prontos para ouvir você!`);
-        break;
-        
-      case 'ajuda':
-        respostas.push(`🤝 **Como você pode ajudar a campanha:**\n\n✅ **Participe dos eventos** - Carreatas, reuniões, comícios\n✅ **Divulgue nas redes sociais** - Compartilhe nossos conteúdos\n✅ **Converse com amigos e família** - Fale sobre as propostas\n✅ **Seja voluntário** - Venha ao comitê e se cadastre\n✅ **Use os materiais** - Adesivos, santinhos, bandeiras\n\nCada ajuda faz a diferença! 💚\n\nComitê: ${CONHECIMENTO.contato.endereco}`);
+        respostas.push(`📞 **Fale Comigo!**\n\n📱 WhatsApp: ${CONHECIMENTO.contato.whatsapp}\n📍 Comitê: ${CONHECIMENTO.contato.endereco}\n📸 Instagram: ${CONHECIMENTO.contato.instagram}\n\nEstou sempre pronto para ouvir você! 💚`);
         break;
         
       case 'agradecimento':
-        respostas.push(`😊 Disponha! Estamos aqui para ajudar.\n\nLembre-se: ${CONHECIMENTO.candidato.nome} é **${CONHECIMENTO.candidato.numero}**!\n\n"${CONHECIMENTO.candidato.slogan}"\n\nTem mais alguma dúvida?`);
+        respostas.push(`😊 Eu que agradeço!\n\nLembra: meu número é **47**!\n\nTem mais alguma dúvida? 💚`);
         break;
         
       default:
-        // Tenta encontrar resposta no FAQ
-        const faqMatch = CONHECIMENTO.faq.find(f => 
-          textoLower.includes(f.pergunta.toLowerCase().substring(0, 10))
-        );
-        if (faqMatch) {
-          respostas.push(faqMatch.resposta);
+        // Busca no conhecimento dinâmico
+        const dynamicResults = githubKnowledge.searchDynamicKnowledge(texto);
+        if (dynamicResults.length > 0 && dynamicResults[0].relevancia > 0.5) {
+          const result = dynamicResults[0];
+          respostas.push(`📄 ${result.trecho || result.conteudoCompleto?.substring(0, 500)}`);
         } else {
-          // Busca no conhecimento dinâmico do GitHub
-          const dynamicResults = githubKnowledge.searchDynamicKnowledge(texto);
-          if (dynamicResults.length > 0 && dynamicResults[0].relevancia > 0.5) {
-            const result = dynamicResults[0];
-            if (result.conteudoCompleto) {
-              respostas.push(`📄 **Informação sobre ${result.categoria.replace(/_/g, ' ')}:**\n\n${result.conteudoCompleto.substring(0, 800)}${result.conteudoCompleto.length > 800 ? '...' : ''}`);
-            } else if (result.trecho) {
-              respostas.push(`📄 **Encontrei isso sobre sua pergunta:**\n\n${result.trecho}`);
-            }
-          } else {
-            respostas.push(`Posso te ajudar com informações sobre:\n\n• **Propostas** - Saúde, educação, transporte, segurança...\n• **Sobre o candidato** - História e experiência\n• **Eventos** - Agenda da campanha\n• **Contato** - Como falar conosco\n• **Como ajudar** - Formas de participar\n• **Número** - Como votar\n\nÉ só perguntar! 😊`);
-          }
+          respostas.push(`Posso te ajudar com:\n\n• **Propostas** - saúde, educação, transporte...\n• **Quem sou eu** - minha história\n• **Como votar** - número 47\n• **Eventos** - agenda da campanha\n\nÉ só perguntar! 💚`);
         }
         break;
     }
@@ -272,20 +226,36 @@ function gerarResposta(intencoes, texto) {
 }
 
 // POST /api/chat - Processo de chat
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, sessionId } = req.body;
     
     if (!message) {
       return res.status(400).json({ error: 'Mensagem é obrigatória' });
     }
     
+    // Se AI está configurado e disponível, usa ele
+    if (aiChat && process.env.AI_API_KEY) {
+      try {
+        const resposta = await aiChat.chat(message, sessionId || 'default');
+        return res.json({
+          response: resposta,
+          mode: 'ai'
+        });
+      } catch (aiError) {
+        console.error('AI error, falling back:', aiError.message);
+        // Fallback para modo tradicional
+      }
+    }
+    
+    // Fallback: modo tradicional com keywords
     const intencoes = detectarIntencoes(message);
-    const resposta = gerarResposta(intencoes, message);
+    const resposta = gerarRespostaFallback(intencoes, message);
     
     res.json({
       response: resposta,
-      intencoes: intencoes
+      intencoes: intencoes,
+      mode: 'fallback'
     });
   } catch (err) {
     console.error('Chat error:', err);
@@ -296,6 +266,15 @@ router.post('/', (req, res) => {
 // GET /api/chat/conhecimento - Retorna base de conhecimento
 router.get('/conhecimento', (req, res) => {
   res.json(CONHECIMENTO);
+});
+
+// GET /api/chat/status - Status do chat (AI ou fallback)
+router.get('/status', (req, res) => {
+  res.json({
+    aiEnabled: !!(aiChat && process.env.AI_API_KEY),
+    provider: process.env.AI_PROVIDER || 'none',
+    model: process.env.AI_MODEL || 'none'
+  });
 });
 
 module.exports = router;
