@@ -170,14 +170,52 @@ async function submitPost() {
   const content = document.getElementById('postContent').value;
   const category = document.getElementById('postCategory').value;
   if (!title || !content) { alert('Preencha título e conteúdo!'); return; }
-  const newPost = { id: Date.now().toString(), title, content, category, user_name: currentUser.name, likes_count: 0, comments_count: 0, is_liked: false, created_at: new Date().toISOString() };
-  posts.unshift(newPost);
-  renderPosts();
-  closeNewPostModal();
-  document.getElementById('postTitle').value = '';
-  document.getElementById('postContent').value = '';
-  showNotification('Post publicado! ✅');
-  setTimeout(() => botResponderPost(newPost), 3000);
+  
+  try {
+    // Salvar no backend
+    const token = localStorage.getItem('rosario47_token');
+    const response = await fetch(`${API_URL}/posts`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, content, category })
+    });
+    
+    if (!response.ok) throw new Error('Erro ao criar post');
+    
+    const data = await response.json();
+    const newPost = data.post || { 
+      id: Date.now().toString(), 
+      title, 
+      content, 
+      category, 
+      user_name: currentUser.name, 
+      likes_count: 0, 
+      comments_count: 0, 
+      is_liked: false, 
+      created_at: new Date().toISOString() 
+    };
+    
+    posts.unshift(newPost);
+    renderPosts();
+    closeNewPostModal();
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postContent').value = '';
+    showNotification('Post publicado! ✅');
+    setTimeout(() => botResponderPost(newPost), 3000);
+  } catch (error) {
+    console.error('Erro ao criar post:', error);
+    // Fallback local se backend falhar
+    const newPost = { id: Date.now().toString(), title, content, category, user_name: currentUser.name, likes_count: 0, comments_count: 0, is_liked: false, created_at: new Date().toISOString() };
+    posts.unshift(newPost);
+    renderPosts();
+    closeNewPostModal();
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postContent').value = '';
+    showNotification('Post publicado localmente! ⚠️');
+  }
 }
 
 function botResponderPost(post) {
@@ -211,7 +249,7 @@ function renderComments() {
   const container = document.getElementById('commentsList');
   if (currentComments.length === 0) { container.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">Nenhum comentário ainda.</p>'; return; }
   container.innerHTML = currentComments.map(c => {
-    const isC = c.is_candidate || c.user_name === 'Antunes do Rosário';
+    const isC = c.is_candidate || c.user_name === 'Equipe Rosário';
     return `<div class="comment-item"><div class="comment-avatar" style="${isC ? 'background:linear-gradient(135deg,#10B981,#F59E0B)' : ''}">${isC ? '47' : c.user_name.charAt(0)}</div><div class="comment-content" style="${isC ? 'background:linear-gradient(135deg,#10B98115,#F59E0B10);border:1px solid #10B981' : ''}"><div class="comment-author" style="${isC ? 'color:#10B981;font-weight:700' : ''}">${c.user_name} ${isC ? '✓' : ''}</div><div class="comment-text">${c.content}</div><div class="comment-time">${formatTime(c.created_at)}</div></div></div>`;
   }).join('');
 }
