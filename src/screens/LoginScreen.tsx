@@ -15,9 +15,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const COLORS = {
-  primary: '#10B981',
-  secondary: '#F59E0B',
-  dark: '#1E3A5F',
+  primary: '#10B981',      // Verde principal
+  primaryDark: '#059669',  // Verde escuro (usado no fundo)
+  secondary: '#F59E0B',    // Laranja
+  dark: '#1F2937',         // Cinza escuro
   white: '#FFFFFF',
   gray: '#6B7280',
   lightGray: '#F3F4F6',
@@ -59,7 +60,7 @@ export default function LoginScreen({ onLogin }: Props) {
       style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.dark} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primaryDark} />
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -143,7 +144,7 @@ export default function LoginScreen({ onLogin }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.dark,
+    backgroundColor: COLORS.primaryDark,  // Verde escuro igual ao site
   },
   scrollContent: {
     flexGrow: 1,

@@ -12,9 +12,10 @@ import EventsScreen from './src/screens/EventsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 
 const COLORS = {
-  primary: '#10B981',
-  secondary: '#F59E0B',
-  dark: '#1E3A5F',
+  primary: '#10B981',      // Verde principal (igual ao site)
+  primaryDark: '#059669',  // Verde escuro
+  secondary: '#F59E0B',    // Laranja/amarelo
+  dark: '#1F2937',         // Cinza escuro (igual ao site)
   white: '#FFFFFF',
   gray: '#6B7280',
   lightGray: '#F3F4F6',
@@ -94,7 +95,7 @@ function MainApp() {
   if (!user) {
     return (
       <>
-        <StatusBar barStyle="light-content" backgroundColor={COLORS.dark} translucent />
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.primaryDark} translucent />
         <LoginScreen onLogin={handleLogin} />
       </>
     );
@@ -119,7 +120,7 @@ function MainApp() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.dark} translucent />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primaryDark} translucent />
       
       {/* Main Content */}
       <View style={[styles.content, { paddingTop: insets.top }]}>

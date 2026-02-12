@@ -151,7 +151,8 @@ function detectarIntencoes(texto) {
 function gerarRespostaFallback(intencoes, texto) {
   const respostas = [];
   
-  for (const intencao of intencoes.slice(0, 2)) {
+  // Pega apenas a primeira intenção mais relevante (evita respostas duplicadas)
+  for (const intencao of intencoes.slice(0, 1)) {
     switch (intencao) {
       case 'saudacao':
         respostas.push(`Olá! 👋 Aqui é a **Equipe Rosário**, a equipe de campanha do candidato a vereador **Antunes do Rosário - 47**!\n\nEstamos aqui para ajudar você a conhecer nosso candidato e suas propostas.\n\nSobre o que gostaria de saber?`);

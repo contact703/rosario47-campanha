@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 const COLORS = {
   primary: '#10B981',
   secondary: '#F59E0B',
-  dark: '#1E3A5F',
+  dark: '#059669',
   white: '#FFFFFF',
   gray: '#6B7280',
   lightGray: '#F3F4F6',
