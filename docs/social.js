@@ -189,11 +189,11 @@ function botResponderPost(post) {
   else if (/segurança|violência/.test(c)) r = `${post.user_name}, ninguém pode viver com medo! 🛡️ Iluminação + câmeras + ronda!\n\nVote 47! 💚`;
   else r = [`${post.user_name}, muito obrigado! 💚 É gente como você que faz a diferença. Vote 47!`, `Valeu, ${post.user_name}! 🙌 Juntos vamos transformar nossa cidade. Vote 47! 💚`][Math.floor(Math.random()*2)];
   if (!postComments[post.id]) postComments[post.id] = [];
-  postComments[post.id].push({ id: Date.now().toString(), content: r, user_name: 'Antunes do Rosário', is_candidate: true, created_at: new Date().toISOString() });
+  postComments[post.id].push({ id: Date.now().toString(), content: r, user_name: 'Equipe Rosário', is_candidate: true, created_at: new Date().toISOString() });
   const p = posts.find(x => x.id === post.id);
   if (p) p.comments_count++;
   renderPosts();
-  showNotification('Antunes do Rosário comentou no seu post! 💚');
+  showNotification('Equipe Rosário comentou no seu post! 💚');
 }
 
 // Comments
