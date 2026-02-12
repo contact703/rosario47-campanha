@@ -265,8 +265,8 @@ async function initBots() {
     try {
       // Verificar se bot já existe
       const existing = await pool.query(
-        'SELECT id FROM users WHERE email = $1',
-        [bot.email]
+        'SELECT id FROM users WHERE id = $1 OR email = $2',
+        [bot.id, bot.email]
       );
       
       if (existing.rows.length === 0) {
@@ -278,12 +278,33 @@ async function initBots() {
         );
         console.log(`✅ Bot criado: ${bot.name}`);
       } else {
-        console.log(`ℹ️ Bot já existe: ${bot.name}`);
+        // ATUALIZAR bot existente (nome, avatar, bio)
+        await pool.query(
+          `UPDATE users SET name = $1, avatar_url = $2, bio = $3 WHERE id = $4 OR email = $5`,
+          [bot.name, bot.avatar, bot.bio, bot.id, bot.email]
+        );
+        console.log(`🔄 Bot atualizado: ${bot.name}`);
       }
     } catch (error) {
       // Se tabela não tem coluna is_bot, ignorar
-      console.log(`⚠️ Erro ao criar bot ${bot.name}:`, error.message);
+      console.log(`⚠️ Erro ao criar/atualizar bot ${bot.name}:`, error.message);
     }
+  }
+  
+  // Atualizar nome em posts e comentários existentes (migração)
+  try {
+    const antunes = BOTS.antunes;
+    await pool.query(
+      `UPDATE posts SET user_name = $1 WHERE user_id = $2`,
+      [antunes.name, antunes.id]
+    );
+    await pool.query(
+      `UPDATE comments SET user_name = $1 WHERE user_id = $2`,
+      [antunes.name, antunes.id]
+    );
+    console.log('🔄 Posts e comentários migrados para Equipe Rosário');
+  } catch (error) {
+    console.log('⚠️ Erro na migração:', error.message);
   }
 }
 
