@@ -217,7 +217,7 @@ function gerarRespostaFallback(intencoes, texto) {
           const result = dynamicResults[0];
           respostas.push(`📄 ${result.trecho || result.conteudoCompleto?.substring(0, 500)}`);
         } else {
-          respostas.push(`Posso te ajudar com:\n\n• **Propostas** - saúde, educação, transporte...\n• **Quem sou eu** - minha história\n• **Como votar** - número 47\n• **Eventos** - agenda da campanha\n\nÉ só perguntar! 💚`);
+          respostas.push(`Podemos te ajudar com:\n\n• **Propostas** - saúde, educação, transporte...\n• **Quem é Antunes** - história do candidato\n• **Como votar** - número 47\n• **Eventos** - agenda da campanha\n\nÉ só perguntar! 💚`);
         }
         break;
     }

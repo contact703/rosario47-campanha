@@ -44,15 +44,15 @@ interface Message {
 const CONHECIMENTO = {
   saudacao: {
     palavras: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'hey', 'e aí', 'eai', 'salve'],
-    resposta: `Olá! 👋 Sou o assistente virtual do ${CANDIDATO.nome} ${CANDIDATO.numero}!
+    resposta: `Olá! 👋 Aqui é a **Equipe Rosário**, a equipe de campanha do candidato a vereador **${CANDIDATO.nome} - ${CANDIDATO.numero}**!
 
-Posso te ajudar com:
+Podemos te ajudar com:
 • 📋 Propostas do candidato
 • 📅 Eventos da campanha  
 • 📞 Informações de contato
 • 👤 Quem é ${CANDIDATO.nome}
 
-Como posso ajudar você hoje?`
+Sobre o que gostaria de saber? 💚`
   },
   
   quem: {
@@ -252,13 +252,13 @@ Lembre-se:
 🗳️ Vote ${CANDIDATO.numero} - ${CANDIDATO.nome}
 "${CANDIDATO.slogan}"
 
-Posso ajudar com mais alguma coisa? 💚`
+Podemos ajudar com mais alguma coisa? 💚`
   }
 };
 
-const RESPOSTA_PADRAO = `Desculpe, não entendi bem sua pergunta. 🤔
+const RESPOSTA_PADRAO = `Desculpe, não entendemos bem sua pergunta. 🤔
 
-Posso te ajudar com:
+A Equipe Rosário pode te ajudar com:
 • Propostas (saúde, educação, transporte, segurança)
 • Eventos da campanha
 • Contato
@@ -284,14 +284,14 @@ function encontrarResposta(texto: string): string {
 
 const MENSAGEM_INICIAL: Message = {
   id: '0',
-  text: `Olá! 👋 Sou o assistente virtual do ${CANDIDATO.nome} ${CANDIDATO.numero}!
+  text: `Olá! 👋 Aqui é a **Equipe Rosário**, a equipe de campanha do candidato a vereador **${CANDIDATO.nome} - ${CANDIDATO.numero}**!
 
-Posso te ajudar com:
+Podemos te ajudar com:
 • 📋 Propostas do candidato
 • 📅 Eventos da campanha
 • 📞 Informações de contato
 
-Como posso ajudar você hoje?`,
+Sobre o que gostaria de saber? 💚`,
   isUser: false,
   timestamp: new Date(),
 };
