@@ -68,13 +68,16 @@ app.post('/api/admin/bots/init', async (req, res) => {
 app.post('/api/admin/bots/migrate-name', async (req, res) => {
   try {
     const { pool } = require('./config/database');
-    // Atualizar usuário
-    await pool.query(`UPDATE users SET name = 'Equipe Rosário', avatar_url = '💚' WHERE id = 'bot-antunes'`);
-    // Atualizar posts
-    await pool.query(`UPDATE posts SET user_name = 'Equipe Rosário' WHERE user_id = 'bot-antunes'`);
-    // Atualizar comentários  
-    await pool.query(`UPDATE comments SET user_name = 'Equipe Rosário' WHERE user_id = 'bot-antunes'`);
-    res.json({ success: true, message: 'Nome migrado para Equipe Rosário em users, posts e comments' });
+    // Atualizar usuário por email ou nome antigo
+    const userResult = await pool.query(`UPDATE users SET name = 'Equipe Rosário' WHERE name LIKE '%Antunes%' OR email LIKE '%antunes%' RETURNING id`);
+    const updatedIds = userResult.rows.map(r => r.id);
+    
+    // Atualizar posts pelo nome antigo
+    await pool.query(`UPDATE posts SET user_name = 'Equipe Rosário' WHERE user_name LIKE '%Antunes%'`);
+    // Atualizar comentários pelo nome antigo
+    await pool.query(`UPDATE comments SET user_name = 'Equipe Rosário' WHERE user_name LIKE '%Antunes%'`);
+    
+    res.json({ success: true, message: 'Nome migrado para Equipe Rosário', updatedUserIds: updatedIds });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
