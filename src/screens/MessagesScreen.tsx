@@ -315,7 +315,7 @@ export default function MessagesScreen({ user }: Props) {
           )}
 
           {/* Input */}
-          <View style={styles.chatInputContainer}>
+          <View style={[styles.chatInputContainer, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]}>
             <TextInput
               style={styles.chatInput}
               value={messageText}
@@ -548,7 +548,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGray,
     backgroundColor: COLORS.white,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 12,
   },
   chatInput: {
     flex: 1,
