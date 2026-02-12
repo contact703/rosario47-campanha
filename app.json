@@ -33,11 +33,11 @@
     "plugins": [
       "expo-audio"
     ],
+    "owner": "titanio",
     "extra": {
       "eas": {
-        "projectId": "titanio-47"
+        "projectId": "d21d4846-db33-4776-94be-a25fc64db335"
       }
-    },
-    "owner": "titaniofilms"
+    }
   }
 }

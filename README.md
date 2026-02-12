@@ -1,110 +1,105 @@
-# Chat Político - App Android
+# 🗳️ App Antunes do Rosário 47
 
-App de chat com político usando React Native/Expo com suporte a voz (TTS e gravação de áudio).
+App de campanha com chat do candidato e rede social de militantes.
 
-## 🚀 Funcionalidades
+## 📱 Funcionalidades
 
-- ✅ Chat interativo com o político
-- ✅ Text-to-Speech (o político fala as respostas)
-- ✅ Gravação de áudio (entrada por voz)
-- ✅ Design responsivo e moderno
-- ✅ CI/CD automático com GitHub Actions
-- ✅ Build automático para Android (APK e AAB)
-- ✅ Deploy automático para Play Store
+### Chat do Candidato
+- Converse com o Antunes (IA com respostas sobre propostas)
+- Text-to-Speech (o candidato "fala" as respostas)
+- Gravação de áudio (Speech-to-Text)
+- **Base de conhecimento atualizável pelo cliente** (via GitHub)
 
-## 📱 Tecnologias
+### Rede Social de Militância
+- Fórum com categorias (Ideias, Organização, Eventos, etc.)
+- Perfis de militantes
+- Mensagens diretas
+- Notificações
+- Eventos da campanha
+- Galeria de fotos
 
-- **React Native** com **Expo SDK 54**
-- **TypeScript**
-- **expo-speech** (Text-to-Speech)
-- **expo-av** (Gravação de áudio)
-- **EAS Build** (Build na nuvem)
-- **EAS Submit** (Publicação na Play Store)
-- **GitHub Actions** (CI/CD)
+## 🛠️ Stack
 
-## 🛠️ Desenvolvimento Local
+- **Frontend:** React Native + Expo SDK 54
+- **Backend:** Supabase (Auth, Database, Realtime, Storage)
+- **Build:** EAS Build (Android/iOS)
+
+## 🚀 Setup
+
+### 1. Instalar dependências
 
 ```bash
-# Instalar dependências
 npm install
-
-# Rodar no Android
-npm run android
-
-# Rodar no iOS
-npm run ios
-
-# Rodar na web
-npm run web
 ```
+
+### 2. Configurar Supabase
+
+1. Crie uma conta em https://supabase.com
+2. Crie um novo projeto
+3. Copie a URL e anon key
+4. Edite `src/services/supabase.ts`:
+
+```typescript
+const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
+const SUPABASE_ANON_KEY = 'sua_anon_key_aqui';
+```
+
+5. Execute o SQL das tabelas (ver `docs/schema.sql`)
+
+### 3. Rodar o app
+
+```bash
+# Desenvolvimento
+npx expo start
+
+# Android
+npx expo run:android
+
+# iOS
+npx expo run:ios
+```
+
+## 📂 Estrutura
+
+```
+politico-chat-app/
+├── App.tsx                 # App principal (chat legado)
+├── conhecimento/           # Base de conhecimento do chatbot
+│   ├── respostas.json     # Respostas editáveis pelo cliente
+│   └── README.md          # Instruções para o cliente
+├── src/
+│   ├── config/            # Configurações
+│   ├── services/          # Supabase, Conhecimento
+│   ├── screens/           # Telas
+│   ├── components/        # Componentes reutilizáveis
+│   ├── hooks/             # Custom hooks
+│   └── types/             # TypeScript types
+├── assets/                # Imagens, ícones
+└── docs/                  # Documentação
+```
+
+## 🔄 Atualizar Respostas do Chat
+
+O cliente (equipe de campanha) pode atualizar as respostas do chatbot editando `conhecimento/respostas.json`.
+
+Ver instruções em `conhecimento/README.md`.
 
 ## 📦 Build
 
-### Build local (APK para testes)
 ```bash
-# Instalar EAS CLI
-npm install -g eas-cli
-
-# Login no Expo
-eas login
-
-# Build APK de preview
+# Build APK (preview)
 eas build --platform android --profile preview
-```
 
-### Build de produção (AAB para Play Store)
-```bash
+# Build AAB (produção)
 eas build --platform android --profile production
 ```
 
-## 🚀 Deploy Automático
+## 🎨 Cores da Campanha
 
-O deploy é automático via GitHub Actions:
-
-1. **Push para `main`** → Build de produção + Submit para Play Store
-2. **Pull Request** → Build de preview (APK)
-
-### Configuração necessária:
-
-1. **EXPO_TOKEN**: Token de acesso do Expo
-   - Gerar em: https://expo.dev/settings/access-tokens
-   - Adicionar como secret no GitHub
-
-2. **Google Service Account**:
-   - Criar no Google Cloud Console
-   - Dar permissões na Play Console
-   - Salvar JSON como `google-service-account.json`
-   - Fazer upload no EAS: `eas credentials`
-
-## 📝 Personalização
-
-### Alterar político
-Edite as constantes no `App.tsx`:
-
-```typescript
-const POLITICO = {
-  nome: 'Nome do Político',
-  cargo: 'Cargo',
-  partido: 'Partido',
-  corPrimaria: '#1a365d',
-  corSecundaria: '#c53030',
-};
-```
-
-### Adicionar respostas
-Adicione no objeto `RESPOSTAS`:
-
-```typescript
-const RESPOSTAS = {
-  'palavra-chave': 'Resposta do político',
-  // ...
-};
-```
-
-## 📄 Licença
-
-MIT - Livre para uso comercial.
+- **Verde PAC:** #10B981
+- **Laranja PAC:** #F59E0B
+- **Azul Escuro:** #1E3A5F
 
 ---
 
-Desenvolvido com ❤️ por Titanio Films
+🗳️ **Antunes do Rosário 47 - Juntos por um Brasil que cuida**
