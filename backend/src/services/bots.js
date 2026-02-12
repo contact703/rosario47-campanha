@@ -12,10 +12,10 @@ const { pool } = require('../config/database');
 const BOTS = {
   antunes: {
     id: 'bot-antunes',
-    name: 'Antunes do Rosário',
-    email: 'antunes@rosario47.com.br',
-    avatar: '🎯',
-    bio: 'Candidato a Vereador | Juntos por uma cidade que cuida | Vote 47',
+    name: 'Equipe Rosário',
+    email: 'equipe@rosario47.com.br',
+    avatar: '💚',
+    bio: 'Equipe de Campanha | Antunes do Rosário 47 | Juntos por uma cidade que cuida',
     isCandidate: true,
   },
   maria: {

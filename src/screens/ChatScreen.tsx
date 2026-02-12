@@ -22,6 +22,7 @@ import {
   useSpeechRecognitionEvent,
 } from 'expo-speech-recognition';
 import { CANDIDATO, FOTOS } from '../config/candidato';
+import API from '../config/api';
 
 const COLORS = {
   primary: '#10B981',
@@ -326,8 +327,27 @@ export default function ChatScreen({ user }: Props) {
     setInputText('');
     setIsTyping(true);
 
-    // Simula delay de digitação
-    setTimeout(() => {
+    try {
+      // Chama o backend com IA
+      const response = await fetch(API.chat, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageText }),
+      });
+      
+      const data = await response.json();
+      const resposta = data.response || encontrarResposta(messageText);
+      
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: resposta,
+        isUser: false,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      // Fallback local se o backend falhar
       const resposta = encontrarResposta(messageText);
       
       const botMessage: Message = {
@@ -338,12 +358,12 @@ export default function ChatScreen({ user }: Props) {
       };
 
       setMessages(prev => [...prev, botMessage]);
+    } finally {
       setIsTyping(false);
-      
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
-    }, 800 + Math.random() * 700);
+    }
   };
 
   const handleSpeak = async (text: string) => {
