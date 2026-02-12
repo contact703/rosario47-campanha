@@ -17,6 +17,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
+import elevenLabs from '../services/elevenlabs';
 import { 
   ExpoSpeechRecognitionModule,
   useSpeechRecognitionEvent,
@@ -368,27 +369,35 @@ export default function ChatScreen({ user }: Props) {
 
   const handleSpeak = async (text: string) => {
     if (isSpeaking) {
-      await Speech.stop();
+      await elevenLabs.stop();
       setIsSpeaking(false);
       return;
     }
 
     setIsSpeaking(true);
     
-    // Limpa formatação markdown e emojis para TTS
-    const cleanText = text
-      .replace(/\*\*/g, '')
-      .replace(/[📋📅📞👤🏥📚🚌🛡️💚🗳️🤖😊👋✅1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣🎉🗣️📢📱📧📍📲🎤🚗👥╔═╗║╚]/g, '')
-      .replace(/\n+/g, '. ');
+    try {
+      // Usa ElevenLabs para voz de alta qualidade
+      await elevenLabs.speak(text);
+    } catch (error) {
+      console.log('ElevenLabs falhou, usando voz padrão:', error);
+      // Fallback para expo-speech se ElevenLabs falhar
+      const cleanText = text
+        .replace(/\*\*/g, '')
+        .replace(/[📋📅📞👤🏥📚🚌🛡️💚🗳️🤖😊👋✅1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣🎉🗣️📢📱📧📍📲🎤🚗👥╔═╗║╚]/g, '')
+        .replace(/\n+/g, '. ');
 
-    Speech.speak(cleanText, {
-      language: 'pt-BR',
-      pitch: 0.85,  // Voz mais grave (masculina)
-      rate: 0.9,
-      voice: 'com.apple.voice.compact.pt-BR.Luciana', // Fallback iOS
-      onDone: () => setIsSpeaking(false),
-      onError: () => setIsSpeaking(false),
-    });
+      Speech.speak(cleanText, {
+        language: 'pt-BR',
+        pitch: 0.85,
+        rate: 0.9,
+        onDone: () => setIsSpeaking(false),
+        onError: () => setIsSpeaking(false),
+      });
+      return;
+    }
+    
+    setIsSpeaking(false);
   };
 
   // Speech Recognition Events
