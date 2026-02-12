@@ -13,6 +13,7 @@ const eventsRoutes = require('./routes/events');
 const chatRoutes = require('./routes/chat');
 const botsService = require('./services/bots');
 const { setupCronJobs } = require('./cron');
+const githubKnowledge = require('./services/github-knowledge');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -90,7 +91,51 @@ app.post('/api/admin/bots/antunes-comment', async (req, res) => {
   }
 });
 
-// Initialize bots on startup
+// ========================================
+// GitHub Knowledge Webhook & Admin Routes
+// ========================================
+
+// Webhook do GitHub - recebe notificações de push
+app.post('/api/webhook/github', (req, res) => {
+  console.log('📨 Webhook recebido do GitHub');
+  const result = githubKnowledge.handleWebhook(req.body);
+  res.json(result);
+});
+
+// Força sincronização manual
+app.post('/api/admin/knowledge/sync', async (req, res) => {
+  try {
+    await githubKnowledge.syncKnowledge();
+    res.json({ 
+      success: true, 
+      message: 'Conhecimento sincronizado!',
+      data: githubKnowledge.getDynamicKnowledge()
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Retorna conhecimento atual
+app.get('/api/admin/knowledge', (req, res) => {
+  res.json({
+    knowledge: githubKnowledge.getDynamicKnowledge(),
+    keywords: githubKnowledge.getDynamicKeywords(),
+    config: githubKnowledge.GITHUB_CONFIG
+  });
+});
+
+// Busca no conhecimento dinâmico
+app.get('/api/admin/knowledge/search', (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: 'Query parameter "q" is required' });
+  }
+  const results = githubKnowledge.searchDynamicKnowledge(q);
+  res.json({ query: q, results });
+});
+
+// Initialize bots and knowledge on startup
 setTimeout(async () => {
   try {
     await botsService.initBots();
@@ -98,8 +143,12 @@ setTimeout(async () => {
     
     // Configurar cron jobs para atividade automática
     setupCronJobs();
+    
+    // Iniciar sync de conhecimento do GitHub
+    githubKnowledge.startPolling();
+    console.log('📚 GitHub Knowledge Sync iniciado!');
   } catch (error) {
-    console.log('⚠️ Erro ao inicializar bots:', error.message);
+    console.log('⚠️ Erro ao inicializar:', error.message);
   }
 }, 3000);
 

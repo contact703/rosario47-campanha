@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const githubKnowledge = require('../services/github-knowledge');
 
 // Base de conhecimento completa do candidato
 const CONHECIMENTO = {
@@ -250,7 +251,18 @@ function gerarResposta(intencoes, texto) {
         if (faqMatch) {
           respostas.push(faqMatch.resposta);
         } else {
-          respostas.push(`Posso te ajudar com informações sobre:\n\n• **Propostas** - Saúde, educação, transporte, segurança...\n• **Sobre o candidato** - História e experiência\n• **Eventos** - Agenda da campanha\n• **Contato** - Como falar conosco\n• **Como ajudar** - Formas de participar\n• **Número** - Como votar\n\nÉ só perguntar! 😊`);
+          // Busca no conhecimento dinâmico do GitHub
+          const dynamicResults = githubKnowledge.searchDynamicKnowledge(texto);
+          if (dynamicResults.length > 0 && dynamicResults[0].relevancia > 0.5) {
+            const result = dynamicResults[0];
+            if (result.conteudoCompleto) {
+              respostas.push(`📄 **Informação sobre ${result.categoria.replace(/_/g, ' ')}:**\n\n${result.conteudoCompleto.substring(0, 800)}${result.conteudoCompleto.length > 800 ? '...' : ''}`);
+            } else if (result.trecho) {
+              respostas.push(`📄 **Encontrei isso sobre sua pergunta:**\n\n${result.trecho}`);
+            }
+          } else {
+            respostas.push(`Posso te ajudar com informações sobre:\n\n• **Propostas** - Saúde, educação, transporte, segurança...\n• **Sobre o candidato** - História e experiência\n• **Eventos** - Agenda da campanha\n• **Contato** - Como falar conosco\n• **Como ajudar** - Formas de participar\n• **Número** - Como votar\n\nÉ só perguntar! 😊`);
+          }
         }
         break;
     }
