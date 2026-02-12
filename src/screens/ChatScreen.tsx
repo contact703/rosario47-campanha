@@ -12,6 +12,7 @@ import {
   Alert,
   Image,
   Linking,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -465,7 +466,11 @@ export default function ChatScreen({ user }: Props) {
   const SUGESTOES = ['Propostas', 'Saúde', 'Educação', 'Eventos', 'Contato', 'Quem é Antunes?'];
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+    >
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerInfo}>
@@ -557,7 +562,7 @@ export default function ChatScreen({ user }: Props) {
           />
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
