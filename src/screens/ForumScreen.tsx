@@ -551,12 +551,13 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     backgroundColor: COLORS.white,
-    maxHeight: 60,
+    minHeight: 56,
   },
   categoriesContent: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     gap: 8,
+    alignItems: 'center',
   },
   categoryChip: {
     flexDirection: 'row',
