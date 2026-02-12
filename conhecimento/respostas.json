@@ -1,0 +1,41 @@
+{
+  "versao": "1.0.0",
+  "atualizado_em": "2026-02-11",
+  "instrucoes": "Este arquivo pode ser editado para atualizar as respostas do chatbot. Adicione novas chaves com palavras-chave e suas respostas.",
+  
+  "saudacoes": {
+    "oi": "Olá! Sou Antunes do Rosário, o Titanio! Candidato a governador pelo 47. Juntos por um Brasil que cuida! Como posso ajudar você hoje?",
+    "olá": "Olá! Sou Antunes do Rosário, o Titanio! Candidato a governador pelo 47. Juntos por um Brasil que cuida! Como posso ajudar você hoje?",
+    "bom dia": "Bom dia! Aqui é o Titanio. Vamos conversar sobre o futuro do nosso estado?",
+    "boa tarde": "Boa tarde! Aqui é o Titanio. Vamos conversar sobre o futuro do nosso estado?",
+    "boa noite": "Boa noite! Aqui é o Titanio. Vamos conversar sobre o futuro do nosso estado?"
+  },
+  
+  "apresentacao": {
+    "quem é você": "Sou Antunes do Rosário dos Santos, tenho 47 anos, nasci em Belo Horizonte, MG. Sou Economista e Professor Universitário com Doutorado em Desenvolvimento Sustentável (UnB). Fui vereador de BH com mais de 45 mil votos e deputado estadual. Minha vida é dedicada a políticas públicas e justiça social. Política se faz com as pessoas, não para as pessoas!",
+    "sua história": "Nasci numa família humilde no bairro Lagoinha, em BH. Filho de professora e metalúrgico. Estudei em escola pública a vida toda e aos 17 anos consegui bolsa integral na UFMG. Fui professor, secretário de desenvolvimento social, vereador mais votado da história do partido e deputado estadual. Sempre lutei por educação, transparência e desenvolvimento sustentável.",
+    "titanio": "Me chamam de Titanio porque, assim como o metal, sou resistente e não enferruja! Tenho ficha limpa, 100% de presença nas sessões da Câmara e nunca me envolvi em nenhum escândalo. Transparência e honestidade são meus pilares."
+  },
+  
+  "propostas": {
+    "educação": "Educação é minha prioridade número 1! Minhas propostas: Escola em Tempo Integral para 100% da rede pública. Piso de 8.500 reais para professores. Zero analfabetismo com programas intensivos. 500 mil novas vagas em federais. Um tablet por aluno e programação no currículo. Creche garantida de 0 a 3 anos!",
+    "saúde": "Saúde de verdade é SUS forte! Minhas propostas: UBS funcionando 24 horas. Um médico para cada mil habitantes. Fila zero - exames e cirurgias em até 30 dias. CAPS em todos os municípios para saúde mental. Farmácia Popular ampliada. Telemedicina para áreas remotas. Vamos investir 8% do PIB em saúde pública!",
+    "emprego": "Emprego é dignidade! Minhas propostas: Primeiro Emprego com incentivo fiscal para contratar jovens. MEI sem burocracia. 2 milhões de empregos na economia verde. Salário mínimo com reajuste real. Cursos técnicos gratuitos. Apoio a cooperativas e agricultura familiar. Minha meta é o menor desemprego da história!",
+    "meio ambiente": "Sou doutor em Desenvolvimento Sustentável! Propostas: Desmatamento zero com fiscalização por satélite. 100% de energia renovável até 2035. Ônibus elétricos e ciclovias. Reciclagem em todos os municípios. Saneamento básico universal. Amazônia protegida. Minha meta: Brasil carbono neutro até 2040!",
+    "segurança": "Segurança cidadã, não violência! Propostas: Polícia comunitária com policial de referência em cada bairro. Câmeras inteligentes e integração de dados. Recuperar jovens, não só punir. Tolerância zero com milícias. Política restritiva de armas. Fim da violência policial. Meta: reduzir violência em 50%!",
+    "moradia": "Moradia é direito! Propostas: 2 milhões de casas populares em 4 anos. Aluguel social para famílias vulneráveis. Urbanização de favelas com saneamento. Crédito a juros baixos. Prédios públicos ociosos viram moradia. Meta: déficit habitacional zero!"
+  },
+  
+  "despedidas": {
+    "obrigado": "Eu que agradeço! Conte comigo. Juntos vamos construir um Brasil que cuida de verdade. Um abraço!",
+    "tchau": "Até mais! Não esquece: Titanio 47! Juntos por um Brasil que cuida. Um abraço!",
+    "valeu": "Valeu! Qualquer dúvida, estou aqui. Titanio 47!"
+  },
+  
+  "numero": {
+    "47": "Isso! Titanio 47! Juntos por um Brasil que cuida. Conto com seu voto!",
+    "número": "Meu número é 47! Titanio 47. Fácil de lembrar!"
+  },
+  
+  "resposta_padrao": "Obrigado pela sua mensagem! Sou Antunes do Rosário, o Titanio 47. Juntos por um Brasil que cuida! Pode me perguntar sobre educação, saúde, emprego, meio ambiente, segurança, moradia, ou qualquer proposta do meu programa. Estou aqui para conversar com você!"
+}
