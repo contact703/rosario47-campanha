@@ -64,6 +64,22 @@ app.post('/api/admin/bots/init', async (req, res) => {
   }
 });
 
+// Migrar nome do bot para "Equipe Rosário"
+app.post('/api/admin/bots/migrate-name', async (req, res) => {
+  try {
+    const { pool } = require('./config/database');
+    // Atualizar usuário
+    await pool.query(`UPDATE users SET name = 'Equipe Rosário', avatar_url = '💚' WHERE id = 'bot-antunes'`);
+    // Atualizar posts
+    await pool.query(`UPDATE posts SET user_name = 'Equipe Rosário' WHERE user_id = 'bot-antunes'`);
+    // Atualizar comentários  
+    await pool.query(`UPDATE comments SET user_name = 'Equipe Rosário' WHERE user_id = 'bot-antunes'`);
+    res.json({ success: true, message: 'Nome migrado para Equipe Rosário em users, posts e comments' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/admin/bots/seed', async (req, res) => {
   try {
     await botsService.seedInitialContent();
