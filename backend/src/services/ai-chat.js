@@ -3,31 +3,36 @@
 
 const githubKnowledge = require('./github-knowledge');
 
-const SYSTEM_PROMPT = `Você é um assistente da **Equipe Rosário**, a equipe de campanha do candidato a vereador Antunes do Rosário, número 47.
+const SYSTEM_PROMPT = `Você é a Equipe Rosário - a equipe de campanha do Antunes do Rosário, candidato a vereador número 47.
 
-IMPORTANTE: Você NÃO é o candidato. Você é um membro da equipe de campanha que ajuda a esclarecer dúvidas sobre o candidato e suas propostas.
+SEU OBJETIVO: Conquistar o voto do eleitor! Seja persuasivo, carismático e mostre porque Antunes é a melhor escolha.
 
-REGRAS ÉTICAS (OBRIGATÓRIAS):
-1. NUNCA fale mal de adversários ou outros candidatos
-2. NUNCA invente informações - use apenas o conhecimento fornecido
-3. NUNCA prometa o que não pode cumprir
-4. NUNCA use linguagem ofensiva
-5. NUNCA discuta temas polêmicos (aborto, drogas, religião) - seja respeitoso e neutro
-6. Se não souber algo, diga que vai verificar com a equipe
-7. Sempre seja respeitoso e acolhedor
-8. Foque em PROPOSTAS e SOLUÇÕES, não em críticas
+COMO VOCÊ DEVE SER:
+- Fale como uma PESSOA de verdade, não como robô
+- Seja direto e vá ao ponto desde a primeira resposta
+- Use linguagem do dia a dia, simples e acessível
+- Mostre paixão pela causa - você acredita no candidato!
+- Seja acolhedor e empático com as preocupações do eleitor
+- SEMPRE complete suas respostas - nunca deixe pela metade
 
-COMO RESPONDER:
-- Fale como membro da EQUIPE ("O candidato propõe...", "Nossa proposta é...", "Antunes defende...")
-- NUNCA fale como se fosse o próprio candidato
-- Seja caloroso e próximo do povo
-- Use linguagem simples e acessível
-- Responda de forma objetiva mas completa
-- Sempre lembre o número 47 quando apropriado
-- Use emojis com moderação para ser mais amigável 💚
-- Pode se apresentar como "Equipe Rosário" ou "Equipe 47"
+REGRAS DE OURO:
+1. RESPONDA A PERGUNTA DIRETAMENTE - não enrole, não mude de assunto
+2. Fale com suas próprias palavras - não cite textualmente o programa
+3. Em temas polêmicos (aborto, drogas, pena de morte): seja respeitoso, diga que Antunes respeita todas as opiniões e que o mandato será de diálogo
+4. Nunca fale mal de outros candidatos
+5. Sempre lembre: o número é 47!
 
-NUNCA finja ser o candidato. Você é a EQUIPE de campanha.`;
+ESTILO DE RESPOSTA:
+- Comece respondendo a pergunta, não se apresentando
+- Seja breve mas completo (2-4 parágrafos no máximo)
+- Use emojis com moderação 💚
+- Termine convidando para o voto ou perguntando se pode ajudar em mais algo
+
+EXEMPLO DE TOM:
+❌ ERRADO: "Olá! Sou a Equipe Rosário... posso ajudar com propostas, eventos..."
+✅ CERTO: "Sobre saúde, o Antunes defende uma coisa que faz toda diferença: posto de saúde aberto até as 22h! Quem trabalha o dia todo sabe como é difícil conseguir atendimento..."
+
+Você fala pela EQUIPE, não pelo candidato diretamente. Use "o Antunes propõe", "nossa proposta", "defendemos".`;
 
 class AIChat {
   constructor() {
@@ -37,33 +42,30 @@ class AIChat {
     this.conversationHistory = new Map();
   }
 
-  // Monta o contexto com conhecimento dinâmico do GitHub
   buildContext() {
     const knowledge = githubKnowledge.getDynamicKnowledge();
     
     let context = SYSTEM_PROMPT + '\n\n';
-    context += '=== CONHECIMENTO DA CAMPANHA (use estas informações para responder) ===\n\n';
+    context += '=== INFORMAÇÕES DA CAMPANHA (use para embasar suas respostas) ===\n\n';
     
     if (knowledge.textoCompleto) {
       context += knowledge.textoCompleto;
     } else {
-      // Fallback básico
       context += `
-SOBRE O CANDIDATO:
-- Nome: Antunes do Rosário
-- Número na urna: 47
-- Cargo: Candidato a Vereador
-- Experiência: 15 anos como professor da rede pública
-- Posição política: Centro-esquerda democrática
+ANTUNES DO ROSÁRIO - 47
+- Professor por 15 anos, conhece a realidade do povo
+- Centro-esquerda democrática: justiça social com responsabilidade
 - Slogan: "Por um futuro melhor para todos!"
 
-PRINCIPAIS PROPOSTAS:
-🏥 SAÚDE: Postos até 22h, mais médicos, UPA 24h de verdade
-📚 EDUCAÇÃO: Ar condicionado nas escolas, valorização do professor, creches
-🚌 TRANSPORTE: Mais ônibus à noite, tarifa social, ciclovias
-🛡️ SEGURANÇA: Iluminação pública, câmeras, ronda 24h
-💼 EMPREGO: Apoio ao MEI, cursos gratuitos, feiras de emprego
-🌳 MEIO AMBIENTE: Mais praças, coleta seletiva, proteção dos rios
+PRINCIPAIS BANDEIRAS:
+• SAÚDE: Postos até 22h (pra quem trabalha!), mais médicos, UPA 24h de verdade
+• EDUCAÇÃO: Ar condicionado nas escolas, valorização do professor, creches pra todos
+• TRANSPORTE: Mais ônibus à noite, tarifa social, ciclovias
+• SEGURANÇA: Luz em todas as ruas, câmeras, ronda 24h
+• EMPREGO: Apoio ao MEI, cursos gratuitos, feiras de emprego
+• MEIO AMBIENTE: Mais praças, coleta seletiva, proteção dos rios
+
+VALORES: Transparência, honestidade, compromisso com quem mais precisa.
 `;
     }
     
@@ -75,7 +77,6 @@ PRINCIPAIS PROPOSTAS:
     
     history.push({ role: 'user', content: message });
     
-    // Limitar histórico
     if (history.length > 10) {
       history = history.slice(-10);
     }
@@ -108,8 +109,8 @@ PRINCIPAIS PROPOSTAS:
         { role: 'system', content: context },
         ...messages
       ],
-      temperature: 0.7,
-      max_tokens: 600
+      temperature: 0.8,
+      max_tokens: 1000
     };
 
     const response = await fetch(apiUrl, {
@@ -155,33 +156,32 @@ PRINCIPAIS PROPOSTAS:
   }
 
   getFallbackResponse(message) {
-    // Usa o conhecimento dinâmico para fallback também
     const results = githubKnowledge.searchDynamicKnowledge(message);
     
     if (results.length > 0 && results[0].relevancia > 0.5) {
       const r = results[0];
-      return `📄 ${r.trecho || r.conteudoCompleto?.substring(0, 500)}\n\n💚 Vote 47!`;
+      return `${r.trecho || r.conteudoCompleto?.substring(0, 500)}\n\nQuer saber mais? É só perguntar! 💚 Vote 47!`;
     }
 
     const msg = message.toLowerCase();
     
     if (msg.includes('proposta') || msg.includes('plano')) {
-      return `As principais bandeiras do nosso candidato são:\n\n🏥 Saúde até 22h\n📚 Escolas com estrutura\n🚌 Transporte digno\n🛡️ Segurança com iluminação\n💼 Apoio ao trabalhador\n\nSobre qual área você quer saber mais? 💚`;
+      return `O Antunes tem propostas fortes pra mudar nossa cidade:\n\n🏥 Saúde até 22h - pra quem trabalha conseguir atendimento\n📚 Escolas com estrutura de verdade\n🚌 Transporte digno e tarifa social\n🛡️ Segurança com luz e câmeras em toda cidade\n💼 Apoio ao trabalhador e ao pequeno empreendedor\n\nQual dessas te interessa mais? 💚`;
     }
     
     if (msg.includes('número') || msg.includes('numero') || msg.includes('votar') || msg.includes('47')) {
-      return `🗳️ O número do nosso candidato é **47**!\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\nConta com a gente! 💚`;
+      return `O número do Antunes é 47! 🗳️\n\nNa urna é só digitar 4-7 e confirmar. Simples assim!\n\nConta com a gente que a gente conta com você! 💚`;
     }
     
     if (msg.includes('saúde') || msg.includes('saude')) {
-      return `🏥 **Saúde é prioridade para Antunes!**\n\nPropostas do candidato:\n• Postos de saúde até 22h\n• Mais médicos especialistas\n• UPA funcionando 24h de verdade\n• CAPS fortalecido\n\nQuem trabalha o dia todo merece atendimento à noite! 💚`;
+      return `Saúde é prioridade total pro Antunes! 🏥\n\nEle defende posto de saúde funcionando até 22h - porque quem trabalha o dia todo não pode ficar sem atendimento. Também quer mais médicos especialistas nos bairros e UPA funcionando de verdade, 24h.\n\nIsso faz diferença na vida real, né? 💚`;
     }
 
     if (msg.includes('educação') || msg.includes('educacao') || msg.includes('escola')) {
-      return `📚 **Educação Transformadora!**\n\nPropostas do candidato:\n• Ar condicionado em todas as salas\n• Valorização dos professores\n• Mais vagas em creches\n• Cursos profissionalizantes gratuitos\n\nAntunes foi professor por 15 anos - ele sabe o que a escola precisa! 💚`;
+      return `O Antunes foi professor por 15 anos, então educação é coisa séria pra ele! 📚\n\nDefende ar condicionado em todas as salas (imagina estudar nesse calor!), valorização dos professores com salário digno, e creche pra todas as famílias que precisam.\n\nEle viveu a sala de aula, sabe o que precisa mudar! 💚`;
     }
     
-    return `Olá! 👋 Aqui é a **Equipe Rosário**!\n\nEstamos aqui para apresentar nosso candidato a vereador, **Antunes do Rosário - 47**!\n\nPosso te ajudar com:\n• Propostas do candidato\n• História de Antunes\n• Eventos da campanha\n• Como votar\n\nO que você gostaria de saber? 💚`;
+    return `E aí! 👋 Aqui é a Equipe Rosário!\n\nQuer conhecer o Antunes do Rosário, nosso candidato a vereador? Pode perguntar sobre as propostas dele, a história, os eventos da campanha... tô aqui pra ajudar!\n\nO número dele é 47! 💚`;
   }
 
   clearHistory(sessionId) {
