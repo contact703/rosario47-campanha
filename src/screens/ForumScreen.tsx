@@ -216,7 +216,19 @@ export default function ForumScreen({ user }: Props) {
     
     setPosting(true);
     try {
-      await apiService.createPost(newTitle.trim(), newContent.trim(), newCategory);
+      const result = await apiService.createPost(newTitle.trim(), newContent.trim(), newCategory);
+      
+      // Forçar bot a comentar após 2 segundos
+      setTimeout(async () => {
+        try {
+          await fetch('https://rosario-production-9c5e.up.railway.app/api/admin/bots/antunes-comment', { method: 'POST' });
+          // Recarregar posts para pegar o comentário do bot
+          const data = await apiService.getPosts();
+          if (data.posts) setPosts(data.posts);
+        } catch (e) {
+          console.log('Bot comment error');
+        }
+      }, 2000);
     } catch (error) {
       console.log('Erro ao criar post');
     }

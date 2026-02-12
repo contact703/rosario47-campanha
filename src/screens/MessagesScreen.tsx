@@ -277,7 +277,8 @@ export default function MessagesScreen({ user }: Props) {
       >
         <KeyboardAvoidingView 
           style={styles.chatModal}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
           {/* Chat Header */}
           <View style={styles.chatHeader}>
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.lightGray,
-    paddingTop: Platform.OS === 'ios' ? 50 : 16,
+    paddingTop: Platform.OS === 'ios' ? 60 : 50,
   },
   chatHeaderInfo: {
     flex: 1,
@@ -547,7 +548,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGray,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 24,
+    backgroundColor: COLORS.white,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 12,
   },
   chatInput: {
     flex: 1,
