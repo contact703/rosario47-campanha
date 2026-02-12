@@ -342,33 +342,6 @@ export default function ForumScreen({ user }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* Categories */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoriesContainer}
-        contentContainerStyle={styles.categoriesContent}
-      >
-        {CATEGORIES.map(category => (
-          <TouchableOpacity
-            key={category.id}
-            style={[
-              styles.categoryChip,
-              selectedCategory === category.id && styles.categoryChipActive
-            ]}
-            onPress={() => setSelectedCategory(category.id)}
-          >
-            <Text style={styles.categoryIcon}>{category.icon}</Text>
-            <Text style={[
-              styles.categoryChipText,
-              selectedCategory === category.id && styles.categoryChipTextActive
-            ]}>
-              {category.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* Posts */}
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -376,7 +349,7 @@ export default function ForumScreen({ user }: Props) {
         </View>
       ) : (
         <FlatList
-          data={posts.filter(p => selectedCategory === 'all' || p.category === selectedCategory)}
+          data={posts}
           keyExtractor={item => item.id}
           renderItem={renderPost}
           contentContainerStyle={styles.postsList}
