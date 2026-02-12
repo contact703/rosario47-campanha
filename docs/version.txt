@@ -1,0 +1,4 @@
+v2.0.1 - 2026-02-12T13:53:00
+- Imagens do candidato restauradas
+- Chatbot melhorado com respostas variadas
+- Deploy Render
