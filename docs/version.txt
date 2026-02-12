@@ -1,4 +1,4 @@
-v2.0.1 - 2026-02-12T13:53:00
-- Imagens do candidato restauradas
-- Chatbot melhorado com respostas variadas
+v2.1.0 - 2026-02-12T14:43:42
+- Bot agora é Equipe Rosário (não mais candidato)
+- Documentos de conhecimento adicionados
 - Deploy Render
