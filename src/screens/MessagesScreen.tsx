@@ -276,9 +276,9 @@ export default function MessagesScreen({ user }: Props) {
         onRequestClose={() => setSelectedConversation(null)}
       >
         <KeyboardAvoidingView 
-          style={styles.chatModal}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+          style={[styles.chatModal, { paddingTop: insets.top }]}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
         >
           {/* Chat Header */}
           <View style={styles.chatHeader}>
@@ -474,7 +474,6 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.lightGray,
-    paddingTop: Platform.OS === 'ios' ? 60 : 50,
   },
   chatHeaderInfo: {
     flex: 1,

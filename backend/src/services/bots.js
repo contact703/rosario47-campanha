@@ -346,6 +346,12 @@ async function createBotComment(botKey, postId, content) {
       [postId, bot.id, bot.name, content]
     );
     
+    // Atualizar contador de comentários do post
+    await pool.query(
+      `UPDATE posts SET comments_count = comments_count + 1 WHERE id = $1`,
+      [postId]
+    );
+    
     console.log(`💬 Comentário de ${bot.name} no post ${postId}`);
     return result.rows[0].id;
   } catch (error) {
