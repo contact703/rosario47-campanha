@@ -1,8 +1,5 @@
-// API Configuration
-const API_BASE_URL = 'https://rosario47api.loca.lt/api';
-
-// Para produção, usar:
-// const API_BASE_URL = 'https://sua-api-railway.up.railway.app/api';
+// API Configuration - Produção Railway
+const API_BASE_URL = 'https://rosario-production-9c5e.up.railway.app/api';
 
 export const API = {
   baseUrl: API_BASE_URL,
