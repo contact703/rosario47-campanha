@@ -500,10 +500,10 @@ export default function ChatScreen({ user }: Props) {
             style={styles.headerAvatarImage}
           />
           <View>
-            <Text style={styles.headerTitle}>{CANDIDATO.nome}</Text>
+            <Text style={styles.headerTitle}>Equipe Rosário</Text>
             <View style={styles.onlineStatus}>
               <View style={styles.onlineDot} />
-              <Text style={styles.headerSubtitle}>Online agora</Text>
+              <Text style={styles.headerSubtitle}>Campanha {CANDIDATO.numero}</Text>
             </View>
           </View>
         </View>
