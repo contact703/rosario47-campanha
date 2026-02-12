@@ -154,44 +154,44 @@ function gerarRespostaFallback(intencoes, texto) {
   for (const intencao of intencoes.slice(0, 2)) {
     switch (intencao) {
       case 'saudacao':
-        respostas.push(`Olá! 👋 Sou Antunes do Rosário, candidato a vereador pelo **47**!\n\nEstou aqui para conversar sobre minhas propostas e ouvir você.\n\nSobre o que gostaria de saber?`);
+        respostas.push(`Olá! 👋 Aqui é a **Equipe Rosário**, a equipe de campanha do candidato a vereador **Antunes do Rosário - 47**!\n\nEstamos aqui para ajudar você a conhecer nosso candidato e suas propostas.\n\nSobre o que gostaria de saber?`);
         break;
         
       case 'candidato':
-        respostas.push(`Sou **Antunes do Rosário**, candidato pelo **47**! 👨‍🏫\n\n${CONHECIMENTO.candidato.historia}\n\n**Minha experiência:**\n${CONHECIMENTO.candidato.experiencia.map(e => `• ${e}`).join('\n')}\n\n💚 Vote 47!`);
+        respostas.push(`**Antunes do Rosário** é nosso candidato a vereador pelo **47**! 👨‍🏫\n\n${CONHECIMENTO.candidato.historia}\n\n**Experiência dele:**\n${CONHECIMENTO.candidato.experiencia.map(e => `• ${e}`).join('\n')}\n\n💚 Vote 47!`);
         break;
         
       case 'numero':
-        respostas.push(`🗳️ **Meu número é 47!**\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\n\nConta comigo que eu conto com você! 💚`);
+        respostas.push(`🗳️ **O número do nosso candidato é 47!**\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\n\nConte com a gente! 💚`);
         break;
         
       case 'saude':
         const s = CONHECIMENTO.propostas.saude;
-        respostas.push(`🏥 **${s.titulo}**\n\n${s.resumo}\n\n**Minhas propostas:**\n${s.itens.map(i => `✅ ${i}`).join('\n')}\n\nQuem trabalha o dia todo merece atendimento à noite! 💚`);
+        respostas.push(`🏥 **${s.titulo}**\n\n${s.resumo}\n\n**Propostas do candidato:**\n${s.itens.map(i => `✅ ${i}`).join('\n')}\n\nAntunes defende: quem trabalha o dia todo merece atendimento à noite! 💚`);
         break;
         
       case 'educacao':
         const e = CONHECIMENTO.propostas.educacao;
-        respostas.push(`📚 **${e.titulo}**\n\nFui professor por 15 anos, sei o que a escola precisa!\n\n**Minhas propostas:**\n${e.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
+        respostas.push(`📚 **${e.titulo}**\n\nAntunes foi professor por 15 anos e sabe o que a escola precisa!\n\n**Propostas do candidato:**\n${e.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'transporte':
         const t = CONHECIMENTO.propostas.transporte;
-        respostas.push(`🚌 **${t.titulo}**\n\n${t.resumo}\n\n**Minhas propostas:**\n${t.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
+        respostas.push(`🚌 **${t.titulo}**\n\n${t.resumo}\n\n**Propostas do candidato:**\n${t.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'seguranca':
         const seg = CONHECIMENTO.propostas.seguranca;
-        respostas.push(`🛡️ **${seg.titulo}**\n\n${seg.resumo}\n\n**Minhas propostas:**\n${seg.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
+        respostas.push(`🛡️ **${seg.titulo}**\n\n${seg.resumo}\n\n**Propostas do candidato:**\n${seg.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'emprego':
         const emp = CONHECIMENTO.propostas.emprego;
-        respostas.push(`💼 **${emp.titulo}**\n\n${emp.resumo}\n\n**Minhas propostas:**\n${emp.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
+        respostas.push(`💼 **${emp.titulo}**\n\n${emp.resumo}\n\n**Propostas do candidato:**\n${emp.itens.map(i => `✅ ${i}`).join('\n')}\n\n💚`);
         break;
         
       case 'propostas':
-        respostas.push(`📋 **Minhas principais bandeiras:**\n\n🏥 **Saúde** - Postos até 22h, UPA 24h\n📚 **Educação** - Escolas com estrutura\n🚌 **Transporte** - Mais ônibus, tarifa social\n🛡️ **Segurança** - Luz e câmeras\n💼 **Emprego** - Apoio ao trabalhador\n🌳 **Meio ambiente** - Cidade verde\n\nPergunta sobre qualquer uma! 💚`);
+        respostas.push(`📋 **Principais bandeiras do candidato:**\n\n🏥 **Saúde** - Postos até 22h, UPA 24h\n📚 **Educação** - Escolas com estrutura\n🚌 **Transporte** - Mais ônibus, tarifa social\n🛡️ **Segurança** - Luz e câmeras\n💼 **Emprego** - Apoio ao trabalhador\n🌳 **Meio ambiente** - Cidade verde\n\nPergunta sobre qualquer uma! 💚`);
         break;
         
       case 'eventos':
@@ -206,7 +206,7 @@ function gerarRespostaFallback(intencoes, texto) {
         break;
         
       case 'agradecimento':
-        respostas.push(`😊 Eu que agradeço!\n\nLembra: meu número é **47**!\n\nTem mais alguma dúvida? 💚`);
+        respostas.push(`😊 Nós que agradecemos!\n\nLembra: o número do nosso candidato é **47**!\n\nTem mais alguma dúvida? 💚`);
         break;
         
       default:

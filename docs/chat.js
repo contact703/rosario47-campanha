@@ -9,17 +9,17 @@ let useBackend = true; // Tenta usar backend primeiro
 // Fallback local caso API falhe
 const FALLBACK_RESPONSES = {
   saudacao: [
-    `Olá! 👋 Sou **Antunes do Rosário**, candidato a vereador pelo **47**!\n\nPode me perguntar sobre propostas, minha história, ou qualquer coisa sobre a campanha!`,
-    `E aí! 👋 Aqui é **Antunes**, número **47**!\n\nTô aqui pra conversar. O que quer saber?`
+    `Olá! 👋 Aqui é a **Equipe Rosário**, a equipe de campanha do candidato a vereador **Antunes do Rosário - 47**!\n\nPode perguntar sobre propostas, a história do candidato, ou qualquer coisa sobre a campanha!`,
+    `E aí! 👋 Aqui é a **Equipe 47**!\n\nEstamos aqui pra ajudar. O que quer saber sobre o nosso candidato?`
   ],
   numero: [
-    `🗳️ **Vote 47!**\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\n\nConta comigo! 💚`
+    `🗳️ **Vote 47!**\n\nNa urna: 4️⃣7️⃣ ✅\n\n**Antunes do Rosário - 47**\n\nConte com a gente! 💚`
   ],
   propostas: [
-    `Minhas principais bandeiras: 📋\n\n🏥 **Saúde** - Postos até 22h\n📚 **Educação** - Escolas com estrutura\n🚌 **Transporte** - Tarifa social\n🛡️ **Segurança** - Luz e câmeras\n💼 **Emprego** - Apoio ao MEI\n\nSobre qual quer saber mais? 💚`
+    `As principais bandeiras do candidato: 📋\n\n🏥 **Saúde** - Postos até 22h\n📚 **Educação** - Escolas com estrutura\n🚌 **Transporte** - Tarifa social\n🛡️ **Segurança** - Luz e câmeras\n💼 **Emprego** - Apoio ao MEI\n\nSobre qual quer saber mais? 💚`
   ],
   padrao: [
-    `Posso te ajudar com:\n• Minhas **propostas**\n• Minha **história**\n• Como **votar** em mim\n• **Eventos** da campanha\n\nPergunta o que quiser! 💚`
+    `Podemos te ajudar com:\n• **Propostas** do candidato\n• **História** do Antunes\n• Como **votar** no 47\n• **Eventos** da campanha\n\nPergunta o que quiser! 💚`
   ]
 };
 
@@ -72,7 +72,7 @@ function addMessage(text, isUser = false) {
     .replace(/\n/g, '<br>');
   
   div.innerHTML = `
-    <div class="message-avatar">${isUser ? 'V' : '47'}</div>
+    <div class="message-avatar">${isUser ? 'V' : 'EQ'}</div>
     <div class="message-content">
       <p>${processedText}</p>
       ${!isUser ? '<button class="message-speak" onclick="speakText(this.parentElement.querySelector(\'p\').textContent)"><i class="fas fa-volume-up"></i> Ouvir</button>' : ''}
@@ -200,8 +200,8 @@ function toggleVoice() {
 
 // Mensagens de boas-vindas
 const BOAS_VINDAS = [
-  `Olá! 👋 Sou **Antunes do Rosário**, candidato a vereador pelo **47**!\n\nPode me perguntar o que quiser sobre propostas, minha história, ou a campanha.\n\nUse o microfone 🎤 ou digite sua pergunta!`,
-  `E aí! 👋 Aqui é **Antunes do Rosário** - **47**!\n\nTô aqui pra conversar. Pergunta o que quiser!\n\n💚`
+  `Olá! 👋 Bem-vindo ao chat da **Equipe Rosário**!\n\nSomos a equipe de campanha do candidato a vereador **Antunes do Rosário - 47**.\n\nPode perguntar o que quiser sobre propostas, a história do candidato, ou a campanha.\n\nUse o microfone 🎤 ou digite sua pergunta! 💚`,
+  `E aí! 👋 Aqui é a **Equipe 47**!\n\nEstamos aqui pra te ajudar a conhecer o candidato **Antunes do Rosário**.\n\nPergunta o que quiser! 💚`
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
