@@ -1,7 +1,7 @@
 /**
  * GitHub Knowledge Sync Service
  * 
- * Sincroniza conhecimento do bot a partir de arquivos .txt no GitHub
+ * Sincroniza conhecimento do bot a partir de arquivos .txt e .md no GitHub
  * Suporta: Webhook (instantâneo) + Polling (backup)
  * 
  * Licença: MIT (uso comercial liberado)
@@ -82,7 +82,7 @@ async function fetchFileContent(filePath) {
 }
 
 /**
- * Lista arquivos .txt na pasta de conhecimento
+ * Lista arquivos .txt e .md na pasta de conhecimento
  */
 async function listKnowledgeFiles() {
   try {
@@ -90,7 +90,10 @@ async function listKnowledgeFiles() {
     const response = await githubRequest(path);
     
     if (Array.isArray(response)) {
-      return response.filter(file => file.name.endsWith('.txt'));
+      return response.filter(file => 
+        file.name.endsWith('.txt') || 
+        file.name.endsWith('.md')
+      );
     }
     return [];
   } catch (error) {
@@ -136,7 +139,7 @@ async function syncKnowledge() {
       const content = await fetchFileContent(`${GITHUB_CONFIG.path}/${file.name}`);
       if (content) {
         // Nome sem extensão como categoria
-        const categoria = file.name.replace('.txt', '').replace(/-/g, '_');
+        const categoria = file.name.replace('.txt', '').replace('.md', '').replace(/-/g, '_');
         
         novosArquivos[categoria] = {
           nome: file.name,
