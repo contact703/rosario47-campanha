@@ -130,6 +130,10 @@ app.post('/api/admin/events/seed', async (req, res) => {
       )
     `);
     
+    // Adicionar coluna image_url se não existir (para tabelas antigas)
+    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS image_url TEXT`).catch(() => {});
+    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`).catch(() => {});
+    
     await pool.query(`
       CREATE TABLE IF NOT EXISTS event_participants (
         id SERIAL PRIMARY KEY,
@@ -187,18 +191,20 @@ app.post('/api/admin/events/seed', async (req, res) => {
       },
     ];
     
+    // Limpar eventos antigos de bots para recriar
+    await pool.query(`DELETE FROM events WHERE created_by = 'bot-antunes'`).catch(() => {});
+    
     let created = 0;
     for (const evento of eventos) {
       try {
         await pool.query(
           `INSERT INTO events (title, description, location, event_date, created_by, created_at, updated_at)
-           VALUES ($1, $2, $3, $4, 'bot-antunes', NOW(), NOW())
-           ON CONFLICT DO NOTHING`,
+           VALUES ($1, $2, $3, $4, 'bot-antunes', NOW(), NOW())`,
           [evento.title, evento.description, evento.location, evento.event_date]
         );
         created++;
       } catch (e) {
-        console.log('Evento já existe ou erro:', e.message);
+        console.log('Erro ao criar evento:', e.message);
       }
     }
     
