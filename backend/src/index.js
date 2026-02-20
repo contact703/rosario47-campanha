@@ -110,6 +110,126 @@ app.post('/api/admin/bots/antunes-comment', async (req, res) => {
   }
 });
 
+// Seed de eventos de campanha
+app.post('/api/admin/events/seed', async (req, res) => {
+  try {
+    const { pool } = require('./config/database');
+    
+    // Garantir que a tabela events existe com as colunas corretas
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS events (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        location TEXT,
+        event_date TIMESTAMPTZ NOT NULL,
+        image_url TEXT,
+        created_by TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `);
+    
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS event_participants (
+        id SERIAL PRIMARY KEY,
+        event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
+        user_id TEXT NOT NULL,
+        status TEXT DEFAULT 'confirmed',
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(event_id, user_id)
+      )
+    `);
+    
+    // Eventos de campanha
+    const eventos = [
+      {
+        title: '🚗 Grande Carreata - Zona Norte',
+        description: 'Carreata saindo da Praça Central às 14h. Tragam bandeiras, adesivos e muita energia! Vamos mostrar a força do 47!',
+        location: 'Praça Central - Zona Norte',
+        event_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 dias
+      },
+      {
+        title: '🎤 Comício no Centro',
+        description: 'Grande comício com Antunes e lideranças! Música, discursos e apresentação das propostas. Família convidada!',
+        location: 'Praça da República',
+        event_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 dias
+      },
+      {
+        title: '🏥 Debate sobre Saúde Pública',
+        description: 'Roda de conversa sobre as propostas de saúde do Antunes. Profissionais da saúde e comunidade são bem-vindos!',
+        location: 'Salão Paroquial - Bairro Esperança',
+        event_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 dias
+      },
+      {
+        title: '📚 Encontro com Professores',
+        description: 'Bate-papo sobre educação e valorização dos professores. Antunes apresenta seu plano para as escolas municipais.',
+        location: 'Escola Municipal José de Alencar',
+        event_date: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 dias
+      },
+      {
+        title: '🏠 Caminhada no Bairro São José',
+        description: 'Antunes vai caminhar pelas ruas do São José, conversando com moradores. Venham participar!',
+        location: 'Rua Principal - Bairro São José',
+        event_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(), // amanhã
+      },
+      {
+        title: '💼 Reunião com Comerciantes',
+        description: 'Encontro para discutir apoio ao comércio local, menos burocracia e incentivos fiscais.',
+        location: 'Associação Comercial',
+        event_date: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 dias
+      },
+      {
+        title: '🎉 Festa da Vitória (após eleição)',
+        description: 'Celebração da nossa vitória! Música ao vivo, comidas típicas e muita alegria. O povo unido jamais será vencido!',
+        location: 'Praça Central',
+        event_date: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 dias
+      },
+    ];
+    
+    let created = 0;
+    for (const evento of eventos) {
+      try {
+        await pool.query(
+          `INSERT INTO events (title, description, location, event_date, created_by, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, 'bot-antunes', NOW(), NOW())
+           ON CONFLICT DO NOTHING`,
+          [evento.title, evento.description, evento.location, evento.event_date]
+        );
+        created++;
+      } catch (e) {
+        console.log('Evento já existe ou erro:', e.message);
+      }
+    }
+    
+    // Bots confirmam presença nos eventos
+    const allEvents = await pool.query('SELECT id FROM events');
+    const bots = ['bot-maria', 'bot-joao', 'bot-pedro', 'bot-ana', 'bot-carlos'];
+    
+    for (const event of allEvents.rows) {
+      // 3-5 bots participam de cada evento
+      const numParticipants = Math.floor(Math.random() * 3) + 3;
+      const shuffledBots = bots.sort(() => Math.random() - 0.5).slice(0, numParticipants);
+      
+      for (const botId of shuffledBots) {
+        try {
+          await pool.query(
+            `INSERT INTO event_participants (event_id, user_id, status, created_at)
+             VALUES ($1, $2, 'confirmed', NOW())
+             ON CONFLICT DO NOTHING`,
+            [event.id, botId]
+          );
+        } catch (e) {}
+      }
+    }
+    
+    res.json({ success: true, message: `${created} eventos criados, participantes adicionados!` });
+  } catch (error) {
+    console.error('Seed events error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ========================================
 // GitHub Knowledge Webhook & Admin Routes
 // ========================================
