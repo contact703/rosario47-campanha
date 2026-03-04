@@ -2,3 +2,4 @@ v2.1.0 - 2026-02-12T14:43:42
 - Bot agora é Equipe Rosário (não mais candidato)
 - Documentos de conhecimento adicionados
 - Deploy Render
+Qua  4 Mar 2026 15:09:20 -03
