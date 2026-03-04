@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converse com Antunes do Rosário 47 - Assistente de Campanha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --primary: #20B2AA;
+            --secondary: #FF6B35;
+            --dark: #1a1a2e;
+            --darker: #0f0f1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+        
+        .header-links {
+            margin-left: auto;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .header-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Voice Toggle */
+        .voice-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .voice-toggle input {
+            display: none;
+        }
+        
+        .voice-toggle label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .voice-toggle.active label {
+            color: var(--primary);
+        }
+        
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .chat-intro {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+        }
+        
+        .chat-intro h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .chat-intro p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+        }
+        
+        /* Messages */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 300px;
+            max-height: 50vh;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease;
+            position: relative;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.bot {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.user {
+            background: linear-gradient(135deg, var(--primary), #17a89e);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message strong {
+            color: var(--secondary);
+        }
+        
+        .message .play-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 5px;
+        }
+        
+        .message .play-btn:hover {
+            color: var(--secondary);
+        }
+        
+        /* Quick Replies */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px 20px;
+            justify-content: center;
+        }
+        
+        .quick-reply {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .quick-reply:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Input Area */
+        .input-area {
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            margin-top: auto;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 5px;
+            align-items: center;
+        }
+        
+        .input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+        
+        .input-wrapper input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .mic-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .mic-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .mic-btn.recording {
+            background: #ff4444;
+            border-color: #ff4444;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .send-btn svg {
+            fill: white;
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Status indicator */
+        .status {
+            text-align: center;
+            padding: 10px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+        }
+        
+        .status.listening {
+            color: #ff4444;
+        }
+        
+        .status.speaking {
+            color: var(--primary);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+        }
+        
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header-links { display: none; }
+            .chat-intro h2 { font-size: 1.4rem; }
+            .message { max-width: 90%; }
+            .quick-reply { padding: 8px 15px; font-size: 0.85rem; }
+            .voice-toggle { padding: 5px 10px; }
+            .voice-toggle label { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-avatar">47</div>
+            <div class="logo-text">
+                <h1>Antunes do Rosário</h1>
+                <span>Assistente de Campanha</span>
+            </div>
+        </div>
+        <div class="voice-toggle" id="voice-toggle">
+            <input type="checkbox" id="voice-enabled" checked>
+            <label for="voice-enabled">🔊 Voz</label>
+        </div>
+        <nav class="header-links">
+            <a href="index.html">Site Completo</a>
+        </nav>
+    </header>
+    
+    <main class="chat-container">
+        <div class="chat-intro">
+            <h2>🎤 Converse por Voz ou Texto!</h2>
+            <p>Clique no microfone para falar ou digite sua pergunta</p>
+        </div>
+        
+        <div class="messages" id="messages">
+            <div class="message bot">
+                <p>Olá! 👋 Eu sou o assistente virtual da campanha do <strong>Antunes do Rosário 47</strong>.</p>
+                <p><strong>Fale com a equipe</strong> por voz ou texto!</p>
+                <p>O que você gostaria de saber?</p>
+                <button class="play-btn" onclick="speak(this.parentElement.innerText)">🔊</button>
+            </div>
+        </div>
+        
+        <div class="quick-replies" id="quick-replies">
+            <button class="quick-reply" data-msg="Quem é Antunes do Rosário?">👤 Quem é Antunes do Rosário?</button>
+            <button class="quick-reply" data-msg="Quais são as propostas?">📋 Propostas</button>
+            <button class="quick-reply" data-msg="O que é o PAC?">🏛️ Sobre o PAC</button>
+            <button class="quick-reply" data-msg="Qual o número para votar?">🗳️ Número</button>
+            <button class="quick-reply" data-msg="Fale sobre educação">📚 Educação</button>
+            <button class="quick-reply" data-msg="Fale sobre saúde">🏥 Saúde</button>
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="input-area">
+            <div class="input-wrapper">
+                <button class="mic-btn" id="mic-btn" title="Clique para falar">🎤</button>
+                <input type="text" id="user-input" placeholder="Digite ou clique no 🎤 para falar...">
+                <button class="send-btn" id="send-btn">
+                    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>Antunes do Rosário 47 - Partido Aliança Cidadã | <a href="index.html">Ver site completo</a> | 🎤 Chat com Voz</p>
+    </footer>
+    
+    <script src="js/chatbot.js"></script>
+    <script>
+        // Voice Chat Implementation - 100% Free (Web Speech API)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const synthesis = window.speechSynthesis;
+        
+        let recognition = null;
+        let isListening = false;
+        let voiceEnabled = true;
+        
+        // Check browser support
+        const hasVoiceSupport = SpeechRecognition && synthesis;
+        
+        if (hasVoiceSupport) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            recognition.onstart = () => {
+                isListening = true;
+                document.getElementById('mic-btn').classList.add('recording');
+                document.getElementById('status').textContent = '🔴 Ouvindo...';
+                document.getElementById('status').className = 'status listening';
+            };
+            
+            recognition.onend = () => {
+                isListening = false;
+                document.getElementById('mic-btn').classList.remove('recording');
+                document.getElementById('status').textContent = '';
+                document.getElementById('status').className = 'status';
+            };
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('user-input').value = transcript;
+                sendMessage();
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech error:', event.error);
+                document.getElementById('status').textContent = 'Erro no reconhecimento de voz';
+                setTimeout(() => {
+                    document.getElementById('status').textContent = '';
+                }, 2000);
+            };
+        } else {
+            document.getElementById('mic-btn').style.display = 'none';
+            document.getElementById('voice-toggle').style.display = 'none';
+        }
+        
+        // Speak text function
+        function speak(text) {
+            if (!voiceEnabled || !synthesis) return;
+            
+            // Cancel any ongoing speech
+            synthesis.cancel();
+            
+            // Clean text for speech
+            const cleanText = text.replace(/[🎤👋👤📋🏛️🗳️📚🏥💼🌱🛡️🏠📱🎭⚖️🌍💡🔍🤝🔊]/g, '')
+                                  .replace(/\*\*/g, '')
+                                  .replace(/\n+/g, '. ');
+            
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            
+            // Try to find a Portuguese voice
+            const voices = synthesis.getVoices();
+            const ptVoice = voices.find(v => v.lang.startsWith('pt'));
+            if (ptVoice) utterance.voice = ptVoice;
+            
+            utterance.onstart = () => {
+                document.getElementById('status').textContent = '🔊 Falando...';
+                document.getElementById('status').className = 'status speaking';
+            };
+            
+            utterance.onend = () => {
+                document.getElementById('status').textContent = '';
+                document.getElementById('status').className = 'status';
+            };
+            
+            synthesis.speak(utterance);
+        }
+        
+        // Toggle voice
+        document.getElementById('voice-enabled').addEventListener('change', (e) => {
+            voiceEnabled = e.target.checked;
+            document.getElementById('voice-toggle').classList.toggle('active', voiceEnabled);
+            if (!voiceEnabled) synthesis.cancel();
+        });
+        document.getElementById('voice-toggle').classList.add('active');
+        
+        // Microphone button
+        document.getElementById('mic-btn').addEventListener('click', () => {
+            if (!recognition) {
+                alert('Seu navegador não suporta reconhecimento de voz. Use Chrome ou Edge.');
+                return;
+            }
+            
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
+        
+        // Load voices when available
+        if (synthesis) {
+            synthesis.onvoiceschanged = () => {
+                // Voices loaded
+            };
+        }
+        
+        // Chat functions
+        const input = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const messages = document.getElementById('messages');
+        const quickReplies = document.getElementById('quick-replies');
+        
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            
+            const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '</p><p>');
+            
+            if (sender === 'bot') {
+                div.innerHTML = `<p>${formattedText}</p><button class="play-btn" onclick="speak(this.parentElement.innerText)">🔊</button>`;
+                // Auto-speak bot response if voice is enabled
+                if (voiceEnabled) {
+                    setTimeout(() => speak(text), 300);
+                }
+            } else {
+                div.innerHTML = `<p>${formattedText}</p>`;
+            }
+            
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addMessage(text, 'user');
+            input.value = '';
+            
+            // Hide quick replies after first message
+            quickReplies.style.display = 'none';
+            
+            setTimeout(() => {
+                const response = ChatBot.findResponse(text);
+                addMessage(response, 'bot');
+            }, 500);
+        }
+        
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Quick replies
+        document.querySelectorAll('.quick-reply').forEach(btn => {
+            btn.addEventListener('click', () => {
+                input.value = btn.dataset.msg;
+                sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>

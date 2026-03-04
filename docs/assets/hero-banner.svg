@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#0f0f1a"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#20B2AA"/>
+      <stop offset="100%" style="stop-color:#FF6B35"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#heroBg)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="url(#accentGrad)" opacity="0.05"/>
+  <circle cx="1100" cy="500" r="250" fill="url(#accentGrad)" opacity="0.05"/>
+  <circle cx="600" cy="300" r="150" fill="url(#accentGrad)" opacity="0.03"/>
+  
+  <!-- Grid pattern -->
+  <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="white" stroke-width="0.5" opacity="0.05"/>
+  </pattern>
+  <rect width="1200" height="600" fill="url(#grid)"/>
+  
+  <!-- Party badge -->
+  <rect x="50" y="50" width="180" height="50" rx="25" fill="rgba(255,107,53,0.2)"/>
+  <text x="140" y="82" font-family="Arial" font-size="16" fill="#FF6B35" text-anchor="middle" font-weight="600">PAC - 47</text>
+  
+  <!-- Main text -->
+  <text x="50" y="200" font-family="Arial" font-size="72" fill="white" font-weight="800">TITA NIO</text>
+  <text x="420" y="200" font-family="Arial" font-size="72" fill="#FF6B35" font-weight="800">47</text>
+  
+  <!-- Slogan -->
+  <text x="50" y="260" font-family="Arial" font-size="28" fill="#20B2AA" font-weight="600">Juntos por um Brasil que cuida</text>
+  
+  <!-- Description -->
+  <text x="50" y="320" font-family="Arial" font-size="18" fill="rgba(255,255,255,0.7)">Economista, professor, pai de família.</text>
+  <text x="50" y="350" font-family="Arial" font-size="18" fill="rgba(255,255,255,0.7)">25 anos dedicados à educação e políticas públicas.</text>
+  
+  <!-- CTA Buttons -->
+  <rect x="50" y="400" width="200" height="50" rx="25" fill="url(#accentGrad)"/>
+  <text x="150" y="432" font-family="Arial" font-size="16" fill="white" text-anchor="middle" font-weight="600">Conheça as Propostas</text>
+  
+  <rect x="270" y="400" width="150" height="50" rx="25" fill="none" stroke="white" stroke-width="2"/>
+  <text x="345" y="432" font-family="Arial" font-size="16" fill="white" text-anchor="middle" font-weight="500">Saiba Mais</text>
+  
+  <!-- Candidate placeholder area -->
+  <rect x="750" y="100" width="350" height="400" rx="20" fill="url(#accentGrad)" opacity="0.3"/>
+  <text x="925" y="320" font-family="Arial" font-size="120" fill="rgba(255,255,255,0.3)" text-anchor="middle" font-weight="800">47</text>
+  
+  <!-- Stats bar -->
+  <rect x="0" y="520" width="1200" height="80" fill="rgba(255,255,255,0.05)"/>
+  <text x="150" y="565" font-family="Arial" font-size="32" fill="#20B2AA" text-anchor="middle" font-weight="800">25+</text>
+  <text x="150" y="590" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.6)" text-anchor="middle">Anos de vida pública</text>
+  
+  <text x="400" y="565" font-family="Arial" font-size="32" fill="#20B2AA" text-anchor="middle" font-weight="800">100%</text>
+  <text x="400" y="590" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.6)" text-anchor="middle">Presença na Câmara</text>
+  
+  <text x="650" y="565" font-family="Arial" font-size="32" fill="#20B2AA" text-anchor="middle" font-weight="800">50mil+</text>
+  <text x="650" y="590" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.6)" text-anchor="middle">Famílias beneficiadas</text>
+  
+  <text x="900" y="565" font-family="Arial" font-size="32" fill="#20B2AA" text-anchor="middle" font-weight="800">0</text>
+  <text x="900" y="590" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.6)" text-anchor="middle">Processos judiciais</text>
+</svg>

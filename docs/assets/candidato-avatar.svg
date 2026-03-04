@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#20B2AA"/>
+      <stop offset="100%" style="stop-color:#FF6B35"/>
+    </linearGradient>
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A574"/>
+      <stop offset="100%" style="stop-color:#C4956A"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="500" rx="20" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="50" cy="50" r="80" fill="white" opacity="0.05"/>
+  <circle cx="350" cy="450" r="100" fill="white" opacity="0.05"/>
+  
+  <!-- Body/Suit -->
+  <ellipse cx="200" cy="550" rx="180" ry="150" fill="#1a1a2e"/>
+  
+  <!-- Shirt collar -->
+  <path d="M140 420 L200 480 L260 420 L260 500 L140 500 Z" fill="white"/>
+  
+  <!-- Tie -->
+  <path d="M185 420 L200 500 L215 420 L210 415 L200 435 L190 415 Z" fill="#FF6B35"/>
+  
+  <!-- Neck -->
+  <ellipse cx="200" cy="380" rx="45" ry="55" fill="url(#skinGrad)"/>
+  
+  <!-- Face -->
+  <ellipse cx="200" cy="280" rx="100" ry="120" fill="url(#skinGrad)"/>
+  
+  <!-- Hair -->
+  <ellipse cx="200" cy="180" rx="95" ry="70" fill="#2d2d2d"/>
+  <ellipse cx="200" cy="200" rx="85" ry="50" fill="#2d2d2d"/>
+  <!-- Gray sides -->
+  <ellipse cx="110" cy="220" rx="20" ry="40" fill="#555"/>
+  <ellipse cx="290" cy="220" rx="20" ry="40" fill="#555"/>
+  
+  <!-- Eyebrows -->
+  <path d="M140 240 Q165 230 180 240" stroke="#2d2d2d" stroke-width="4" fill="none"/>
+  <path d="M220 240 Q235 230 260 240" stroke="#2d2d2d" stroke-width="4" fill="none"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="160" cy="270" rx="18" ry="12" fill="white"/>
+  <ellipse cx="240" cy="270" rx="18" ry="12" fill="white"/>
+  <circle cx="162" cy="270" r="8" fill="#4a3728"/>
+  <circle cx="242" cy="270" r="8" fill="#4a3728"/>
+  <circle cx="164" cy="268" r="3" fill="white"/>
+  <circle cx="244" cy="268" r="3" fill="white"/>
+  
+  <!-- Nose -->
+  <path d="M200 280 Q195 310 185 330 Q200 340 215 330 Q205 310 200 280" fill="#C4956A" opacity="0.5"/>
+  
+  <!-- Smile -->
+  <path d="M160 350 Q200 380 240 350" stroke="#8B6914" stroke-width="3" fill="none"/>
+  
+  <!-- Ears -->
+  <ellipse cx="100" cy="280" rx="15" ry="25" fill="url(#skinGrad)"/>
+  <ellipse cx="300" cy="280" rx="15" ry="25" fill="url(#skinGrad)"/>
+  
+  <!-- Glasses (optional professional look) -->
+  <rect x="135" y="255" width="50" height="35" rx="5" fill="none" stroke="#333" stroke-width="3"/>
+  <rect x="215" y="255" width="50" height="35" rx="5" fill="none" stroke="#333" stroke-width="3"/>
+  <line x1="185" y1="270" x2="215" y2="270" stroke="#333" stroke-width="3"/>
+  
+  <!-- Number badge -->
+  <circle cx="340" cy="60" r="40" fill="white"/>
+  <text x="340" y="72" font-family="Arial" font-size="32" font-weight="800" fill="#FF6B35" text-anchor="middle">47</text>
+</svg>
