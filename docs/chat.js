@@ -115,7 +115,7 @@ function handleKeyPress(event) {
 }
 
 async function sendMessage() {
-  const input = document.getElementById('messageInput');
+  const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   
