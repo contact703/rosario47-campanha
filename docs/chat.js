@@ -51,7 +51,7 @@ async function sendToBackend(message) {
     if (!response.ok) throw new Error('API error');
     
     const data = await response.json();
-    return data.response;
+    return data.reply;
   } catch (error) {
     console.error('Backend error:', error);
     useBackend = false; // Desabilita backend após falha
