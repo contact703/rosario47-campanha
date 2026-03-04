@@ -1,7 +1,7 @@
 // CHAT BOT - ANTUNES DO ROSÁRIO 47
 // Versão com integração ao backend inteligente
 
-const API_URL = 'https://rosario-production-9c5e.up.railway.app';
+const API_URL = 'https://affectionate-energy-production-fda3.up.railway.app';
 let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 let isSpeaking = false, isRecording = false, recognition = null;
 let useBackend = true; // Tenta usar backend primeiro
