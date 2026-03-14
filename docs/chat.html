@@ -410,14 +410,27 @@
     
     <script src="js/chatbot.js"></script>
     <script>
-        // Voice Chat Implementation - 100% Free (Web Speech API)
+        // ── Voice Chat — Debug Hunter + Code Ninja fix 2026-03-14 ──
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const synthesis = window.speechSynthesis;
         
         let recognition = null;
         let isListening = false;
         let voiceEnabled = true;
-        
+        let availableVoices = [];
+
+        // FIX: carregar vozes com retry (Chrome carrega async, Firefox sync)
+        function loadVoices() {
+            availableVoices = synthesis ? synthesis.getVoices() : [];
+        }
+        if (synthesis) {
+            loadVoices();
+            synthesis.onvoiceschanged = loadVoices;
+            // Fallback: tentar de novo em 500ms (Chrome bug)
+            setTimeout(loadVoices, 500);
+            setTimeout(loadVoices, 1500);
+        }
+
         // Check browser support
         const hasVoiceSupport = SpeechRecognition && synthesis;
         
@@ -425,73 +438,108 @@
             recognition = new SpeechRecognition();
             recognition.lang = 'pt-BR';
             recognition.continuous = false;
-            recognition.interimResults = false;
-            
+            recognition.interimResults = true; // FIX: interimResults=true evita silêncio
+
             recognition.onstart = () => {
                 isListening = true;
                 document.getElementById('mic-btn').classList.add('recording');
                 document.getElementById('status').textContent = '🔴 Ouvindo...';
                 document.getElementById('status').className = 'status listening';
             };
-            
+
             recognition.onend = () => {
                 isListening = false;
                 document.getElementById('mic-btn').classList.remove('recording');
                 document.getElementById('status').textContent = '';
                 document.getElementById('status').className = 'status';
             };
-            
+
             recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
+                // FIX: pegar o resultado mais recente e verificar se é final
+                const results = event.results;
+                const last = results[results.length - 1];
+                const transcript = last[0].transcript;
                 document.getElementById('user-input').value = transcript;
-                sendMessage();
+                if (last.isFinal) {
+                    sendMessage();
+                }
             };
-            
+
             recognition.onerror = (event) => {
                 console.error('Speech error:', event.error);
-                document.getElementById('status').textContent = 'Erro no reconhecimento de voz';
-                setTimeout(() => {
-                    document.getElementById('status').textContent = '';
-                }, 2000);
+                isListening = false;
+                document.getElementById('mic-btn').classList.remove('recording');
+                const msg = event.error === 'not-allowed'
+                    ? '⛔ Permita o microfone nas configurações do navegador'
+                    : event.error === 'no-speech'
+                    ? '🤐 Não ouvi nada. Tente novamente.'
+                    : 'Erro no microfone: ' + event.error;
+                document.getElementById('status').textContent = msg;
+                setTimeout(() => { document.getElementById('status').textContent = ''; }, 3000);
             };
         } else {
-            document.getElementById('mic-btn').style.display = 'none';
-            document.getElementById('voice-toggle').style.display = 'none';
+            // FIX: esconder apenas microfone, manter toggle de voz (síntese pode funcionar)
+            const micBtn = document.getElementById('mic-btn');
+            if (micBtn) micBtn.style.display = 'none';
+            if (!SpeechRecognition) console.warn('SpeechRecognition não suportado neste browser');
         }
         
-        // Speak text function
+        // FIX: speak() robusto com fallback de vozes e workaround do bug Chrome
         function speak(text) {
             if (!voiceEnabled || !synthesis) return;
             
-            // Cancel any ongoing speech
+            // FIX: cancelar e dar tempo pro browser limpar (bug Chrome)
             synthesis.cancel();
             
-            // Clean text for speech
-            const cleanText = text.replace(/[🎤👋👤📋🏛️🗳️📚🏥💼🌱🛡️🏠📱🎭⚖️🌍💡🔍🤝🔊]/g, '')
-                                  .replace(/\*\*/g, '')
-                                  .replace(/\n+/g, '. ');
+            const cleanText = text
+                .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}]/gu, '')
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '')
+                .replace(/\n+/g, '. ')
+                .replace(/\s+/g, ' ')
+                .trim();
             
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'pt-BR';
-            utterance.rate = 1.0;
-            utterance.pitch = 1.0;
+            if (!cleanText || cleanText.length < 3) return;
             
-            // Try to find a Portuguese voice
-            const voices = synthesis.getVoices();
-            const ptVoice = voices.find(v => v.lang.startsWith('pt'));
-            if (ptVoice) utterance.voice = ptVoice;
-            
-            utterance.onstart = () => {
-                document.getElementById('status').textContent = '🔊 Falando...';
-                document.getElementById('status').className = 'status speaking';
-            };
-            
-            utterance.onend = () => {
-                document.getElementById('status').textContent = '';
-                document.getElementById('status').className = 'status';
-            };
-            
-            synthesis.speak(utterance);
+            // FIX: usar setTimeout para garantir que cancel() processou (bug Chrome/Edge)
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 0.95;  // FIX: ligeiramente mais lento — mais natural e sem cortes
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                // FIX: buscar voz pt-BR das vozes já carregadas
+                if (availableVoices.length > 0) {
+                    const ptBR = availableVoices.find(v => v.lang === 'pt-BR');
+                    const pt   = availableVoices.find(v => v.lang.startsWith('pt'));
+                    if (ptBR) utterance.voice = ptBR;
+                    else if (pt) utterance.voice = pt;
+                }
+                
+                utterance.onstart = () => {
+                    document.getElementById('status').textContent = '🔊 Falando...';
+                    document.getElementById('status').className = 'status speaking';
+                };
+                utterance.onend = () => {
+                    document.getElementById('status').textContent = '';
+                    document.getElementById('status').className = 'status';
+                };
+                utterance.onerror = (e) => {
+                    console.error('TTS error:', e);
+                    document.getElementById('status').textContent = '';
+                    document.getElementById('status').className = 'status';
+                };
+                
+                synthesis.speak(utterance);
+
+                // FIX: workaround bug Chrome onde synthesis trava após ~15s
+                // Resume periódico para evitar pausa silenciosa
+                const resumeHack = setInterval(() => {
+                    if (synthesis.paused) synthesis.resume();
+                    if (!synthesis.speaking) clearInterval(resumeHack);
+                }, 5000);
+            }, 100);
         }
         
         // Toggle voice
