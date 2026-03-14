@@ -162,6 +162,9 @@ async function speakText(text) {
   try {
     // Parar áudio anterior
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    // Mostrar indicador de carregamento imediato
+    const statusEl = document.querySelector('.status') || document.getElementById('status');
+    if (statusEl) { statusEl.textContent = '⏳ Carregando voz...'; statusEl.style.display = 'block'; }
 
     const cleanText = text
       .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}]/gu, '')
@@ -180,11 +183,11 @@ async function speakText(text) {
         },
         body: JSON.stringify({
           text: cleanText,
-          model_id: 'eleven_multilingual_v2',
+          model_id: 'eleven_turbo_v2_5',  // 3x mais rápido que multilingual_v2
           voice_settings: {
             stability: 0.5,
             similarity_boost: 0.8,
-            style: 0.5,
+            style: 0.3,
             use_speaker_boost: true
           }
         })
@@ -201,7 +204,14 @@ async function speakText(text) {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     currentAudio = new Audio(url);
-    currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.onplay = () => {
+      if (statusEl) { statusEl.textContent = '🔊 Falando...'; }
+    };
+    currentAudio.onended = () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      if (statusEl) { statusEl.textContent = ''; statusEl.style.display = ''; }
+    };
     await currentAudio.play();
 
   } catch (e) {
