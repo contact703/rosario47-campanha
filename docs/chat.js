@@ -153,46 +153,75 @@ if (window.speechSynthesis) {
   setTimeout(loadTTSVoices, 1500);
 }
 
-// speakText — chamado pelo botão "Ouvir" em cada mensagem do bot
-function speakText(text) {
-  if (!window.speechSynthesis) return;
+// speakText — ElevenLabs TTS (voz Antonio PT-BR)
+const ELEVEN_KEY = 'sk_20da726a9b1fc53800fcc32cf39773cd36db81c37dc805e0';
+const ELEVEN_VOICE = 'pqHfZKP75CvOlQylNhV4'; // Antonio — voz masculina brasileira
+let currentAudio = null;
 
-  // Cancelar áudio anterior + delay para evitar race condition (bug Chrome)
-  window.speechSynthesis.cancel();
-  setTimeout(() => {
+async function speakText(text) {
+  try {
+    // Parar áudio anterior
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
     const cleanText = text
       .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}]/gu, '')
-      .replace(/\*\*/g, '')
-      .replace(/\*/g, '')
-      .replace(/\n+/g, '. ')
-      .replace(/\s+/g, ' ')
-      .trim();
+      .replace(/\*\*/g, '').replace(/\*/g, '')
+      .replace(/\n+/g, '. ').replace(/\s+/g, ' ').trim();
 
     if (!cleanText || cleanText.length < 3) return;
 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 0.95;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
+    const response = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE}/stream`,
+      {
+        method: 'POST',
+        headers: {
+          'xi-api-key': ELEVEN_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: cleanText,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.8,
+            style: 0.5,
+            use_speaker_boost: true
+          }
+        })
+      }
+    );
 
-    // Usar voz PT-BR se disponível
-    if (ttsVoices.length > 0) {
-      const ptBR = ttsVoices.find(v => v.lang === 'pt-BR');
-      const pt   = ttsVoices.find(v => v.lang.startsWith('pt'));
-      if (ptBR) utterance.voice = ptBR;
-      else if (pt) utterance.voice = pt;
+    if (!response.ok) {
+      console.error('ElevenLabs error:', response.status);
+      // Fallback para Web Speech API se ElevenLabs falhar
+      _fallbackSpeak(cleanText);
+      return;
     }
 
-    utterance.onerror = (e) => console.warn('TTS error:', e.error);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
+    await currentAudio.play();
 
-    // Workaround Chrome: synthesis trava após ~15s
-    const resumeInterval = setInterval(() => {
-      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-      if (!window.speechSynthesis.speaking) clearInterval(resumeInterval);
-    }, 5000);
+  } catch (e) {
+    console.error('speakText error:', e);
+    _fallbackSpeak(text);
+  }
+}
 
-    window.speechSynthesis.speak(utterance);
+// Fallback Web Speech API caso ElevenLabs não responda
+function _fallbackSpeak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  setTimeout(() => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'pt-BR'; u.rate = 0.95;
+    if (ttsVoices.length > 0) {
+      const v = ttsVoices.find(v => v.lang === 'pt-BR') || ttsVoices.find(v => v.lang.startsWith('pt'));
+      if (v) u.voice = v;
+    }
+    window.speechSynthesis.speak(u);
   }, 100);
 }
 
