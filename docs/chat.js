@@ -138,3 +138,124 @@ async function sendMessage() {
 
 // Inicializar
 console.log('Chatbot inicializado!');
+
+// ── ÁUDIO & MICROFONE — Fix 2026-03-14 (Debug Hunter + Code Ninja) ──
+
+// Carregar vozes TTS com retry (Chrome async fix)
+let ttsVoices = [];
+function loadTTSVoices() {
+  ttsVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+}
+if (window.speechSynthesis) {
+  loadTTSVoices();
+  window.speechSynthesis.onvoiceschanged = loadTTSVoices;
+  setTimeout(loadTTSVoices, 500);
+  setTimeout(loadTTSVoices, 1500);
+}
+
+// speakText — chamado pelo botão "Ouvir" em cada mensagem do bot
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+
+  // Cancelar áudio anterior + delay para evitar race condition (bug Chrome)
+  window.speechSynthesis.cancel();
+  setTimeout(() => {
+    const cleanText = text
+      .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}]/gu, '')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/\n+/g, '. ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!cleanText || cleanText.length < 3) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // Usar voz PT-BR se disponível
+    if (ttsVoices.length > 0) {
+      const ptBR = ttsVoices.find(v => v.lang === 'pt-BR');
+      const pt   = ttsVoices.find(v => v.lang.startsWith('pt'));
+      if (ptBR) utterance.voice = ptBR;
+      else if (pt) utterance.voice = pt;
+    }
+
+    utterance.onerror = (e) => console.warn('TTS error:', e.error);
+
+    // Workaround Chrome: synthesis trava após ~15s
+    const resumeInterval = setInterval(() => {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      if (!window.speechSynthesis.speaking) clearInterval(resumeInterval);
+    }, 5000);
+
+    window.speechSynthesis.speak(utterance);
+  }, 100);
+}
+
+// toggleVoice — chamado pelo botão de microfone
+function toggleVoice() {
+  const btn = document.getElementById('voiceBtn');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('Reconhecimento de voz não suportado neste navegador. Use Chrome ou Edge.');
+    return;
+  }
+
+  if (isRecording) {
+    // Parar gravação
+    if (recognition) recognition.stop();
+    isRecording = false;
+    if (btn) { btn.classList.remove('recording'); btn.title = 'Falar'; }
+    return;
+  }
+
+  // Iniciar gravação
+  recognition = new SpeechRecognition();
+  recognition.lang = 'pt-BR';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    if (btn) { btn.classList.add('recording'); btn.title = 'Parar gravação'; }
+    console.log('🎤 Ouvindo...');
+  };
+
+  recognition.onresult = (event) => {
+    const results = event.results;
+    const last = results[results.length - 1];
+    const transcript = last[0].transcript;
+    const input = document.getElementById('chatInput');
+    if (input) input.value = transcript;
+    if (last.isFinal) {
+      sendMessage();
+    }
+  };
+
+  recognition.onerror = (event) => {
+    isRecording = false;
+    if (btn) { btn.classList.remove('recording'); btn.title = 'Falar'; }
+    const erros = {
+      'not-allowed': '⛔ Permita o microfone no navegador (🔒 na barra de endereços)',
+      'no-speech': '🤐 Não ouvi nada. Tente falar mais perto.',
+      'network': '🌐 Erro de conexão. Verifique sua internet.',
+      'audio-capture': '🎙️ Microfone não encontrado.',
+    };
+    const msg = erros[event.error] || 'Erro no microfone: ' + event.error;
+    console.error('Speech error:', event.error);
+    alert(msg);
+  };
+
+  recognition.onend = () => {
+    isRecording = false;
+    if (btn) { btn.classList.remove('recording'); btn.title = 'Falar'; }
+  };
+
+  recognition.start();
+}
