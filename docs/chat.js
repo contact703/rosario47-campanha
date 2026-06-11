@@ -87,7 +87,7 @@ function addMessage(text, isUser) {
   
   div.innerHTML = '<div class="message-avatar">' + (isUser ? 'V' : 'EQ') + '</div>' +
     '<div class="message-content"><p>' + processedText + '</p>' +
-    (!isUser ? '<button class="message-speak" onclick="speakText(this.parentElement.querySelector(\'p\').textContent)"><i class="fas fa-volume-up"></i> Ouvir</button>' : '') +
+    (!isUser ? '<button class="message-speak" onclick="speakText(this.parentElement.querySelector(\'p\').textContent, this)"><i class="fas fa-volume-up"></i> Ouvir</button>' : '') +
     '</div>';
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
@@ -156,12 +156,21 @@ if (window.speechSynthesis) {
 // speakText — ElevenLabs TTS (voz Antonio PT-BR)
 const ELEVEN_KEY = 'sk_20da726a9b1fc53800fcc32cf39773cd36db81c37dc805e0';
 const ELEVEN_VOICE = 'pqHfZKP75CvOlQylNhV4'; // Antonio — voz masculina brasileira
-let currentAudio = null;
+let currentAudio = null, currentBtn = null;
+function _resetSpeakBtn(btn) { if (btn) btn.innerHTML = '<i class="fas fa-volume-up"></i> Ouvir'; }
 
-async function speakText(text) {
+async function speakText(text, btn) {
   try {
+    // mesmo botão tocando -> alterna PLAY/PAUSE
+    if (currentAudio && currentBtn === btn && btn) {
+      if (currentAudio.paused) { currentAudio.play(); btn.innerHTML = '<i class="fas fa-pause"></i> Pausar'; }
+      else { currentAudio.pause(); btn.innerHTML = '<i class="fas fa-play"></i> Continuar'; }
+      return;
+    }
     // Parar áudio anterior
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    _resetSpeakBtn(currentBtn);
+    currentBtn = btn || null;
     // Mostrar indicador de carregamento imediato
     const statusEl = document.querySelector('.status') || document.getElementById('status');
     if (statusEl) { statusEl.textContent = '⏳ Carregando voz...'; statusEl.style.display = 'block'; }
@@ -204,18 +213,22 @@ async function speakText(text) {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     currentAudio = new Audio(url);
+    if (btn) btn.innerHTML = '<i class="fas fa-pause"></i> Pausar';
     currentAudio.onplay = () => {
       if (statusEl) { statusEl.textContent = '🔊 Falando...'; }
     };
     currentAudio.onended = () => {
       URL.revokeObjectURL(url);
       currentAudio = null;
+      _resetSpeakBtn(currentBtn);
+      currentBtn = null;
       if (statusEl) { statusEl.textContent = ''; statusEl.style.display = ''; }
     };
     await currentAudio.play();
 
   } catch (e) {
     console.error('speakText error:', e);
+    _resetSpeakBtn(btn); currentBtn = null;
     _fallbackSpeak(text);
   }
 }
