@@ -153,9 +153,7 @@ if (window.speechSynthesis) {
   setTimeout(loadTTSVoices, 1500);
 }
 
-// speakText — ElevenLabs TTS (voz Antonio PT-BR)
-const ELEVEN_KEY = 'sk_20da726a9b1fc53800fcc32cf39773cd36db81c37dc805e0';
-const ELEVEN_VOICE = 'pqHfZKP75CvOlQylNhV4'; // Antonio — voz masculina brasileira
+// speakText — voz via PROXY do backend (a chave ElevenLabs fica no servidor, nunca aqui).
 let currentAudio = null, currentBtn = null;
 function _resetSpeakBtn(btn) { if (btn) btn.innerHTML = '<i class="fas fa-volume-up"></i> Ouvir'; }
 
@@ -183,23 +181,11 @@ async function speakText(text, btn) {
     if (!cleanText || cleanText.length < 3) return;
 
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE}/stream`,
+      `${API_URL}/api/tts`,
       {
         method: 'POST',
-        headers: {
-          'xi-api-key': ELEVEN_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: cleanText,
-          model_id: 'eleven_turbo_v2_5',  // 3x mais rápido que multilingual_v2
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.8,
-            style: 0.3,
-            use_speaker_boost: true
-          }
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: cleanText })
       }
     );
 

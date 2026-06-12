@@ -3,8 +3,8 @@
 
 import { Audio } from 'expo-av';
 
-// API Key do ElevenLabs (configurada via environment)
-const ELEVENLABS_API_KEY = 'sk_20da726a9b1fc53800fcc32cf39773cd36db81c37dc805e0';
+// Voz via PROXY do backend — a chave ElevenLabs fica no servidor, NUNCA no app.
+const TTS_ENDPOINT = 'https://affectionate-energy-production-fda3.up.railway.app/api/tts';
 
 // Vozes disponíveis no ElevenLabs
 // Você pode mudar para outras vozes: https://api.elevenlabs.io/v1/voices
@@ -44,23 +44,12 @@ class ElevenLabsService {
         return;
       }
 
-      // Faz request para ElevenLabs API
-      const response = await fetch(
-        `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'audio/mpeg',
-            'Content-Type': 'application/json',
-            'xi-api-key': ELEVENLABS_API_KEY,
-          },
-          body: JSON.stringify({
-            text: cleanText,
-            model_id: 'eleven_multilingual_v2', // Melhor para português
-            voice_settings: VOICE_SETTINGS,
-          }),
-        }
-      );
+      // Faz request para o PROXY do backend (chave fica no servidor)
+      const response = await fetch(TTS_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'audio/mpeg', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: cleanText }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();

@@ -11,6 +11,7 @@ const commentsRoutes = require('./routes/comments');
 const messagesRoutes = require('./routes/messages');
 const eventsRoutes = require('./routes/events');
 const chatRoutes = require('./routes/chat');
+const ttsRoutes = require('./routes/tts');
 const botsService = require('./services/bots');
 const { setupCronJobs } = require('./cron');
 const githubKnowledge = require('./services/github-knowledge');
@@ -53,6 +54,7 @@ app.use('/api/comments', commentsRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/tts', ttsRoutes);
 
 // Admin routes for bots
 app.post('/api/admin/bots/init', async (req, res) => {
